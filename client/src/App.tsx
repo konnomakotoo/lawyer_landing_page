@@ -1,33 +1,55 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter, Routes, Route} from 'react-router-dom'
+import Slider from './components/Slider/Slider'
+import { ThemeProvider, createGlobalStyle } from 'styled-components';
+import { theme } from './ui-kit/theme';
+import NavBar from './components/NavBar';
+import Login from './Pages/Login';
+import SignUp from './Pages/SignUp';
+import type { AppDispatch, RootState } from './redux/store/redux.store';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { fetchCurrentUser } from './redux/slices/userSlice';
+
+const GlobalStyle = createGlobalStyle`
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: sans-serif;
+    background: #f9fafb;
+    color: ${({ theme }) => theme.colors.text};
+  }
+`;
 
 function App() {
-  const [count, setCount] = useState(0)
+  const dispatch = useDispatch<AppDispatch>()
+  const user = useSelector((state: RootState) => state.user.user)
+  
+  
+  useEffect(() => {
+    dispatch(fetchCurrentUser())
+  }, [dispatch]);
+
+   if (user) {
+    console.log('Пользователь найден')
+  }
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+    <ThemeProvider theme={theme}>
+      <GlobalStyle />
+      <BrowserRouter>
+      <NavBar />
+        {/* <NavBar /> */}
+        <Routes>
+          <Route path="/" element={<Slider />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
+          {/* <Route path="/news" element={<AboutUs />} />
+          <Route path="/news/:id" element={<Team />} />
+          <Route path="/news/:id" element={<Projects />} />
+          <Route path="/news/:id" element={<Profile />} /> */}
+        </Routes>
+      </BrowserRouter>
+      </ThemeProvider>
     </>
   )
 }
