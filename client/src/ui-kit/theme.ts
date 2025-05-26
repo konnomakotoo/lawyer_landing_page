@@ -1,4 +1,3 @@
-// ui-kit/theme.ts
 import type { DefaultTheme } from 'styled-components';
 
 export const theme: DefaultTheme = {
@@ -12,5 +11,10 @@ export const theme: DefaultTheme = {
     sm: '0.5rem',
     md: '1rem',
     lg: '2rem',
+  },
+  fonts: {
+    body: '"Rubik", sans-serif',
+    heading: '"Rubik", sans-serif',
+    monospace: '"Menlo", monospace',
   },
 };

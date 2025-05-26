@@ -6,7 +6,13 @@ import { useLocation, useNavigate } from "react-router-dom"
 import type { AppDispatch } from "../redux/store/redux.store";
 import { fetchSignUpUser } from "../redux/slices/userSlice";
 import { useState } from "react";
-import { FormTitle, FormWrapper, StyledButton, StyledForm, StyledInput } from "../ui-kit/Form";
+import { FormTitle, FormWrapper, Icon, IconEye, InputWrapper, StyledButton, StyledError, StyledForm, StyledInput } from "../ui-kit/Form";
+import PersonIcon from "../Icons/PersonIcon";
+import MailIcon from "../Icons/MailIcon";
+import PhoneIcon from "../Icons/PhoneIcon";
+import LockedIcon from "../Icons/LockedIcon";
+import EyeClosedIcon from "../Icons/EyeClosedIcon";
+import EyeOpenIcon from "../Icons/EyeOpenIcon";
 
 export type ServerError = {
     error: string;
@@ -17,12 +23,12 @@ export type ServerError = {
   };
 
 const schema = yup.object({
-  name: yup.string().required('Имя обязательно').min(2, 'Минимум 2 символа').max(50, 'Максимум 50 символов'),
-  email:  yup.string().required('Email обязательно').email('Неверный формат email'),
-  lastName: yup.string().required('Фамилия обязательна').min(2).max(50),
+  name: yup.string().required('Введите имя!').min(2, 'Минимум 2 символа').max(50, 'Максимум 50 символов'),
+  email:  yup.string().required('Введите email!').email('Неверный формат email'),
+  lastName: yup.string().required('Введите фамилию!').min(2).max(50),
   phoneNumber: yup
     .string()
-    .required('Телефон обязателен')
+    .required('Введите номер телефона!')
     .matches(/^\+?\d{10,15}$/, 'Неверный формат телефона'),
   password:  yup.string().required('Password обязательно').min(6, 'Минимум 6 символов')
             .matches(/[a-z]/, 'Минимум 1 строчная буква')
@@ -42,7 +48,6 @@ const SignUp: React.FC = () => {
         resolver: yupResolver(schema)
     })
     const [showPassword, setShowPassword] = useState(false);
-    const [passwordEntered, setPasswordEntered] = useState(false);
 
 
     const onSubmit = async (data: FormData) => {
@@ -65,43 +70,46 @@ const SignUp: React.FC = () => {
         <FormWrapper>
           <FormTitle>Регистрация</FormTitle>
           <StyledForm onSubmit={handleSubmit(onSubmit)} className="auth-form">
-            <StyledInput
-              type="text"
-              placeholder="Имя пользователя"
-              {...register("name")}
-            />
-            <p className="auth-error">{errors.name?.message}</p>
+            <InputWrapper>
+            <Icon><PersonIcon /></Icon>
+            <StyledInput type="text" placeholder="Имя пользователя" {...register("name")}/>
+            </InputWrapper>
+            {errors.name && <StyledError>{errors?.name?.message}</StyledError>}
+            <InputWrapper>
+            <Icon><PersonIcon /></Icon>
             <StyledInput placeholder="Фамилия" {...register('lastName')} />
-            {errors.lastName && <p className="auth-error">{errors.lastName.message}</p>}
+            </InputWrapper>
+            {errors.lastName && <StyledError>{errors.lastName.message}</StyledError>}
+            <InputWrapper>
+            <Icon><MailIcon /></Icon>
             <StyledInput type="text" placeholder="Почта" {...register("email")} />
-            <p className="auth-error">{errors.email?.message}</p>
-            <StyledInput placeholder="+7XXXXXXXXXX" {...register('phoneNumber')} />
-            {errors.phoneNumber && <p className="auth-error">{errors.phoneNumber.message}</p>}
+            </InputWrapper>
+            {errors.email && <StyledError>{errors?.email?.message}</StyledError>}
+            <InputWrapper>
+            <Icon><PhoneIcon /></Icon>
+            <StyledInput placeholder="+7XXXXXXXXXX" {...register('phoneNumber')} defaultValue="+7"/>
+            </InputWrapper>
+            {errors.phoneNumber && <StyledError>{errors.phoneNumber.message}</StyledError>}
+            <InputWrapper>
+            <Icon><LockedIcon /></Icon>
             <StyledInput
               type={showPassword ? "text" : "password"}
               placeholder="Пароль"
-              {...register("password", {
-                onChange: (e) => {
-                  setPasswordEntered(e.target.value.length > 0);
-                },
-              })}
+              {...register("password")}
             />
-            <p className="auth-error">{errors.password?.message}</p>
+            <IconEye onClick={() => setShowPassword((prev) => !prev)}>{showPassword ? <EyeOpenIcon /> : <EyeClosedIcon />}</IconEye>
+            </InputWrapper>
+            {errors.password && <StyledError>{errors?.password?.message}</StyledError>}
+            <InputWrapper>
+            <Icon><LockedIcon /></Icon>
             <StyledInput
               type={showPassword ? "text" : "password"}
               placeholder="Повторите пароль"
               {...register("confirmPassword")}
             />
-            <p className="auth-error">{errors.confirmPassword?.message}</p>
-            {passwordEntered && (
-              <span
-                className="toggle-register-password"
-                onClick={() => setShowPassword(!showPassword)}
-                style={{cursor: 'pointer'}}
-              >
-                {showPassword ? "🙈 Скрыть" : "👁️ Показать"}
-              </span>
-            )}
+            <IconEye onClick={() => setShowPassword((prev) => !prev)}>{showPassword ? <EyeOpenIcon /> : <EyeClosedIcon />}</IconEye>
+            </InputWrapper>
+            {errors.confirmPassword && <StyledError>{errors?.confirmPassword?.message}</StyledError>}
             <StyledInput className="signup-button" type="submit" value="Отправить" />
             <StyledButton
               className="signup-button"

@@ -16,7 +16,7 @@ body {
 
 .swiper {
   width: 100%;
-  height: 100%;
+  height: 600px;
   background: #000;
 }
 
@@ -74,7 +74,7 @@ body {
 /* Планшеты до 768px */
 @media (max-width: 768px) {
   .swiper {
-    height: auto;
+    height: 500px;
     /* width: 60%; */
   }
   .swiper-slide {
@@ -84,6 +84,14 @@ body {
   .parallax-bg {
     width: 180%;
     background-position: center top;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 130%;
+    height: 100%;
+    -webkit-background-size: cover;
+    background-size: cover;
+    background-position: center;
   }
   .swiper-slide .title {
     font-size: 30px;
@@ -100,7 +108,7 @@ body {
 /* Мобильные до 480px */
 @media (max-width: 480px) {
   .swiper {
-    height: auto;
+    height: 400px;
   }
   .swiper-slide {
     padding: 20px 20px;

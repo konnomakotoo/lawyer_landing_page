@@ -28,7 +28,7 @@ export default function Slider() {
           className="parallax-bg"
           style={{
             backgroundImage:
-              'url(https://swiperjs.com/demos/images/nature-1.jpg)',
+              'url(/law.jpg)',
           }}
           data-swiper-parallax="-23%"
         ></div>

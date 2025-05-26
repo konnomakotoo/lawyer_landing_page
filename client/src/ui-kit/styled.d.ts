@@ -7,12 +7,17 @@ declare module 'styled-components' {
       secondary: string;
       text: string;
       textOnPrimary: string;
-      backgroundAlt: string;
+      backgroundAlt?: string;
     };
     space: {
       sm: string;
       md: string;
       lg: string;
+    };
+     fonts: {
+      body: string;
+      heading: string;
+      monospace: string;
     };
   }
 }

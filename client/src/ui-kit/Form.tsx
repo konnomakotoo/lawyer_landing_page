@@ -21,11 +21,34 @@ export const StyledForm = styled.form`
   gap: 1rem;
 `;
 
+export const InputWrapper = styled.div`
+  position: relative;
+`;
+
+export const Icon = styled.span`
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: ${({ theme }) => theme.colors.secondary};
+  pointer-events: none;  /* чтобы клик приходил на сам input */
+`;
+
+export const IconEye = styled.span`
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: ${({ theme }) => theme.colors.secondary};
+  cursor: pointer;
+`;
+
 export const StyledInput = styled.input`
-  padding: 0.75rem 1rem;
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
   font-size: 1rem;
   border: 1px solid #ccc;
   border-radius: 4px;
+  width: 100%;
   &:focus {
     outline: none;
     border-color: ${({ theme }) => theme.colors.primary};
@@ -47,4 +70,9 @@ export const StyledButton = styled.button<{ variant?: 'solid' | 'outline' }>`
   &:hover {
     opacity: 0.9;
   }
+`;
+
+export const StyledError = styled.p`
+  font-size: 0.9rem;
+  color: red;
 `;
