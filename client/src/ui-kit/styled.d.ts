@@ -8,6 +8,7 @@ declare module 'styled-components' {
       text: string;
       textOnPrimary: string;
       backgroundAlt?: string;
+      textOnBackground: string,
     };
     space: {
       sm: string;

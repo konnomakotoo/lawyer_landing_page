@@ -1,45 +1,6 @@
-// src/components/Services.tsx
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
-
-type Service = {
-  id: string;
-  title: string;
-  description: string;
-};
-
-const services: Service[] = [
-  {
-    id: 'consult',
-    title: 'Юридическая консультация',
-    description: 'Подробный анализ вашей ситуации с выдачей письменного заключения и рекомендациями по дальнейшим шагам.',
-  },
-  {
-    id: 'contracts',
-    title: 'Составление договоров',
-    description: 'Разработка и проверка договоров любой сложности с учётом ваших интересов и актуального законодательства.',
-  },
-  {
-    id: 'representation',
-    title: 'Судебное представительство',
-    description: 'Представительство в судах всех инстанций: подготовка процессуальных документов и защита ваших прав в зале суда.',
-  },
-  {
-    id: 'family',
-    title: 'Семейные споры',
-    description: 'Разводы, споры о детях, разделе имущества — комплексная поддержка в любых семейно-правовых вопросах.',
-  },
-  {
-    id: 'criminal',
-    title: 'Уголовная защита',
-    description: 'Защита прав на этапах проверки, дознания и в суде при обвинениях в уголовных преступлениях.',
-  },
-  {
-    id: 'inheritance',
-    title: 'Наследственные дела',
-    description: 'Оспаривание и оформление наследства, защита прав наследников в суде.',
-  },
-];
+import { services } from '../data/services';
 
 const float = keyframes`
   0%, 100% { transform: translateY(0); }
@@ -103,6 +64,5 @@ const Services: React.FC = () => {
 };
 
 export default Services;
-
 
 

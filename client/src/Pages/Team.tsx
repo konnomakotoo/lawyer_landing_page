@@ -1,26 +1,15 @@
-// src/components/LawyersDirectory.tsx
-import React, { useState } from 'react';
-import styled from 'styled-components';
 
-interface Lawyer {
-  id: number;
-  name: string;
-  field: string;
-  photo: string;
-}
 
-const lawyersData: Lawyer[] = [
-  { id: 1, name: 'Иван Иванов', field: 'Гражданское право', photo: '/photos/ivan.jpg' },
-  { id: 2, name: 'Мария Петрова', field: 'Семейное право', photo: '/photos/maria.jpg' },
-  { id: 3, name: 'Сергей Сидоров', field: 'Уголовное право', photo: '/photos/sergey.jpg' },
-  { id: 4, name: 'Елена Кузнецова', field: 'Наследственное право', photo: '/photos/elena.jpg' },
-  { id: 5, name: 'Дмитрий Орлов', field: 'Трудовое право', photo: '/photos/dmitry.jpg' },
-  { id: 6, name: 'Анна Смирнова', field: 'Административное право', photo: '/photos/anna.jpg' },
-];
+import { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import styled from 'styled-components'
+import type { AppDispatch, RootState } from '../redux/store/redux.store'
+import { fetchTeam } from '../redux/slices/teamSlice'
+import { useNavigate } from 'react-router-dom'
 
 const Wrapper = styled.div`
   padding: ${({ theme }) => theme.space.lg};
-`;
+`
 
 const Controls = styled.div`
   display: flex;
@@ -30,7 +19,7 @@ const Controls = styled.div`
   @media (max-width: 480px) {
     flex-direction: column;
   }
-`;
+`
 
 const SearchInput = styled.input`
   flex: 1;
@@ -38,14 +27,14 @@ const SearchInput = styled.input`
   font-size: 1rem;
   border: 1px solid #ccc;
   border-radius: 4px;
-`;
+`
 
-const Select = styled.select`
+const FilterSelect = styled.select`
   padding: ${({ theme }) => theme.space.sm};
   font-size: 1rem;
   border: 1px solid #ccc;
   border-radius: 4px;
-`;
+`
 
 const Grid = styled.div`
   display: grid;
@@ -58,7 +47,7 @@ const Grid = styled.div`
   @media (max-width: 480px) {
     grid-template-columns: 1fr;
   }
-`;
+`
 
 const Card = styled.div`
   background: #fff;
@@ -66,98 +55,116 @@ const Card = styled.div`
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
 
   &:hover {
     transform: translateY(-4px);
     box-shadow: 0 4px 16px rgba(0,0,0,0.15);
   }
-`;
+`
 
 const Photo = styled.img`
   width: 100%;
   height: 180px;
   object-fit: cover;
-`;
+`
 
 const Info = styled.div`
   padding: ${({ theme }) => theme.space.md};
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.space.sm};
-`;
+`
 
 const Name = styled.h3`
   margin: 0;
   font-size: 1.125rem;
-`;
+`
 
 const Field = styled.p`
   margin: 0;
   color: #666;
   font-size: 0.95rem;
-`;
+`
 
-const ContactButton = styled.button`
-  margin-top: auto;
-  padding: ${({ theme }) => theme.space.sm} ${({ theme }) => theme.space.md};
-  background: ${({ theme }) => theme.colors.secondary};
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  align-self: flex-start;
-  transition: background 0.2s ease;
+// const ContactButton = styled.button`
+//   margin-top: auto;
+//   padding: ${({ theme }) => theme.space.sm} ${({ theme }) => theme.space.md};
+//   background: ${({ theme }) => theme.colors.secondary};
+//   color: #fff;
+//   border: none;
+//   border-radius: 4px;
+//   cursor: pointer;
+//   align-self: flex-start;
+//   transition: background 0.2s ease;
 
-  &:hover {
-    background: ${({ theme }) => theme.colors.primary};
-  }
-`;
+//   &:hover {
+//     background: ${({ theme }) => theme.colors.primary};
+//   }
+// `
+
+// фиксированный список областей для фильтра
+const areaOptions = [
+  '',
+  'Гражданское право',
+  'Налоговое право',
+  'Уголовное право',
+  'Корпоративное право',
+]
 
 export default function Team() {
-  const [search, setSearch] = useState('');
-  const [filterField, setFilterField] = useState('');
+  const dispatch = useDispatch<AppDispatch>()
+  const { team } = useSelector((state: RootState) => state.team)
+  const navigate = useNavigate()
 
-  const fields = Array.from(new Set(lawyersData.map(l => l.field)));
+  const [search, setSearch] = useState('')
+  const [filterArea, setFilterArea] = useState('')
 
-  const filteredLawyers = lawyersData.filter(lawyer => {
-    const matchesName = lawyer.name.toLowerCase().includes(search.toLowerCase());
-    const matchesField = filterField ? lawyer.field === filterField : true;
-    return matchesName && matchesField;
-  });
+  useEffect(() => {
+    dispatch(fetchTeam())
+  }, [dispatch])
+
+  // фильтрация по имени/фамилии и по области
+  const filtered = team.filter(l => {
+    const fullName = `${l.name} ${l.lastName}`.toLowerCase()
+    const matchesSearch = fullName.includes(search.toLowerCase())
+    const matchesArea   = filterArea ? l.area === filterArea : true
+    return matchesSearch && matchesArea
+  })
 
   return (
     <Wrapper>
       <Controls>
         <SearchInput
           type="text"
-          placeholder="Поиск по имени..."
+          placeholder="Поиск по имени или фамилии..."
           value={search}
           onChange={e => setSearch(e.target.value)}
         />
-        <Select value={filterField} onChange={e => setFilterField(e.target.value)}>
-          <option value="">Все области</option>
-          {fields.map(field => (
-            <option key={field} value={field}>{field}</option>
+        <FilterSelect
+          value={filterArea}
+          onChange={e => setFilterArea(e.target.value)}
+        >
+          {areaOptions.map(area => (
+            <option key={area} value={area}>
+              {area || 'Все области'}
+            </option>
           ))}
-        </Select>
+        </FilterSelect>
       </Controls>
 
       <Grid>
-        {filteredLawyers.map(lawyer => (
-          <Card key={lawyer.id}>
-            <Photo src={lawyer.photo} alt={lawyer.name} />
+        {filtered.map(lawyer => (
+          <Card key={lawyer.id} onClick={() => navigate(`/team/${lawyer?.id}`)}>
+            <Photo src={lawyer.image} alt={`${lawyer.name} ${lawyer.lastName}`} />
             <Info>
-              <Name>{lawyer.name}</Name>
-              <Field>{lawyer.field}</Field>
-              <ContactButton>Связаться</ContactButton>
+              <Name>{lawyer.name} {lawyer.lastName}</Name>
+              <Field>{lawyer?.position}</Field>
+              <Field><strong>Область:</strong> {lawyer.area}</Field>
             </Info>
           </Card>
         ))}
       </Grid>
     </Wrapper>
-  );
+  )
 }
-
-
-
-

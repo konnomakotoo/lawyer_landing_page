@@ -6,7 +6,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import type { AppDispatch } from "../redux/store/redux.store";
 import { fetchLoginUser } from "../redux/slices/userSlice";
 import { useState } from "react";
-import { FormTitle, FormWrapper, Icon, IconEye, InputWrapper, StyledButton, StyledError, StyledForm, StyledInput } from "../ui-kit/Form";
+import { FormTitle, FormWrapper, Icon, IconEye, InputWrapper, StyledButton, StyledError, StyledForm, StyledInput, StyledLine, StyledLineOr, StyledOr, StyledText, StyledtextClicked, StyledTextContainer } from "../ui-kit/Form";
 import MailIcon from "../Icons/MailIcon";
 import EyeClosedIcon from "../Icons/EyeClosedIcon";
 import EyeOpenIcon from "../Icons/EyeOpenIcon";
@@ -85,13 +85,16 @@ const [showPassword, setShowPassword] = useState(false);
             </InputWrapper>
             {errors.password && <StyledError>{errors?.password?.message}</StyledError>}
             {serverError && <p style={{ color: "red" }}>{serverError}</p>}
-            <StyledInput type="submit" value="Отправить" />
-            <StyledButton
-              className="signup-button"
-              onClick={() => navigate("/signup")}
-            >
-              Регистрация
-            </StyledButton>
+             <StyledButton  type="submit">Отправить </StyledButton>
+              <StyledLineOr>
+                <StyledLine />
+                <StyledOr>OR</StyledOr>
+                <StyledLine />
+              </StyledLineOr>
+              <StyledTextContainer>
+                <StyledText>Еще не зарегестрирован?</StyledText>
+                <StyledtextClicked onClick={() => navigate("/signup")}>Регистрация</StyledtextClicked>
+              </StyledTextContainer>
           </StyledForm>
         </FormWrapper>
     );

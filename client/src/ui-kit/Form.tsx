@@ -59,6 +59,7 @@ export const StyledInput = styled.input`
 export const StyledButton = styled.button<{ variant?: 'solid' | 'outline' }>`
   padding: 0.75rem 1rem;
   font-size: 1rem;
+  font-weight: bold;
   border-radius: 4px;
   cursor: pointer;
   border: 2px solid transparent;
@@ -75,4 +76,40 @@ export const StyledButton = styled.button<{ variant?: 'solid' | 'outline' }>`
 export const StyledError = styled.p`
   font-size: 0.9rem;
   color: red;
+`;
+
+export const StyledLineOr = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+export const StyledLine = styled.div`
+  width: 400px;
+  height: 0.5px;
+  background-color: grey;
+`;
+
+export const StyledOr = styled.div`
+  font-size: 0.8rem;
+  color: grey;
+  margin: 0 10px 0 10px;
+`;
+
+export const StyledTextContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+`;
+
+export const StyledText = styled.div`
+  font-size: 0.8rem;
+  color: #0C253F;
+`;
+
+export const StyledtextClicked = styled.div`
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: #75B1CE;
+  cursor: pointer;
 `;

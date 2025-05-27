@@ -1,3 +1,4 @@
+require('dotenv').config();
 const AuthService = require("../services/authService");
 const jwtConfig = require("../config/jwtConfig");
 
@@ -38,7 +39,6 @@ function logout(req, res) {
 }
 
 function protectedRoute(req, res) {
-  // verifyAccessToken middleware уже положил user в res.locals.user
   res.json({ user: res.locals.user });
 }
 

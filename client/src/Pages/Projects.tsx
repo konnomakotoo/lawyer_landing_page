@@ -1,107 +1,71 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-
-export type Project = {
-  id: string;
-  category: 'metro' | 'advokatology';
-  title: string;
-  description: string;
-  date: string;
-  mediaType: 'video' | 'image';
-  mediaUrl?: string;   // для картинок
-  videoId?: string;    // для YouTube
-};
-
-const projects: Project[] = [
-  {
-    id: '1',
-    category: 'metro',
-    title: 'Беседа в метро #1',
-    description: 'Интервью с адвокатом о правах пассажиров.',
-    date: '15.05.2024',
-    mediaType: 'video',
-    videoId: 'dQw4w9WgXcQ',
-  },
-  {
-    id: '2',
-    category: 'metro',
-    title: 'Беседа в метро #2',
-    description: 'Разбор типичных споров в подземке.',
-    date: '22.06.2024',
-    mediaType: 'image',
-    mediaUrl: '/images/metro-case.jpg',
-  },
-  {
-    id: '3',
-    category: 'advokatology',
-    title: 'Адвокатология: выпуск 1',
-    description: 'Научный взгляд на адвокатскую практику.',
-    date: '01.07.2024',
-    mediaType: 'video',
-    videoId: '9bZkp7q19f0',
-  },
-  {
-    id: '4',
-    category: 'advokatology',
-    title: 'Адвокатология: выпуск 2',
-    description: 'Этика и особенности профессии.',
-    date: '12.08.2024',
-    mediaType: 'image',
-    mediaUrl: '/images/advocatology.jpg',
-  },
-];
-
-const categories = [
-  { label: 'Все проекты', value: 'all' },
-  { label: 'Беседа в метро', value: 'metro' },
-  { label: 'Адвокатология', value: 'advokatology' },
-] as const;
+import type { AppDispatch, RootState } from '../redux/store/redux.store';
+import { fetchCategories, type Project } from '../redux/slices/categoriesSlice';
 
 export default function Projects() {
-  const [filter, setFilter] = useState<typeof categories[number]['value']>('all');
+  const dispatch = useDispatch<AppDispatch>();
+  const { categories, isLoading, error } = useSelector((s: RootState) => s.categories);
+  const [filter, setFilter] = useState<number | 'all'>('all');
 
-  const filtered = filter === 'all'
-    ? projects
-    : projects.filter(p => p.category === filter);
+  useEffect(() => {
+    dispatch(fetchCategories());
+  }, [dispatch]);
+
+  if (isLoading) return <Loading>Загрузка...</Loading>;
+  if (error)     return <Error>Ошибка: {error}</Error>;
+
+  // Собираем список проектов в зависимости от фильтра
+  const projectsToShow: Project[] =
+    filter === 'all'
+      ? categories.flatMap(cat => cat.categories)
+      : (categories.find(cat => cat.id === filter)?.categories ?? []);
 
   return (
     <Container>
       <Filters>
+        <FilterButton
+          active={filter === 'all'}
+          onClick={() => setFilter('all')}
+        >
+          Все проекты
+        </FilterButton>
         {categories.map(cat => (
           <FilterButton
-            key={cat.value}
-            active={filter === cat.value}
-            onClick={() => setFilter(cat.value)}
+            key={cat.id}
+            active={filter === cat.id}
+            onClick={() => setFilter(cat.id)}
           >
-            {cat.label}
+            {cat.title}
           </FilterButton>
         ))}
       </Filters>
 
-      <Grid>
-        {filtered.map(p => (
+      <List>
+        {projectsToShow.map(p => (
           <Card key={p.id}>
             <Media>
-              {p.mediaType === 'video' ? (
+              {p.urlVideo ? (
                 <iframe
-                  src={`https://www.youtube.com/embed/${p.videoId}`}
+                  src={p.urlVideo}
                   title={p.title}
                   frameBorder="0"
                   allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
                 />
               ) : (
-                <img src={p.mediaUrl} alt={p.title} />
+                <img src={p.urlImage!} alt={p.title} />
               )}
             </Media>
-            <Content>
+            <Info>
               <Title>{p.title}</Title>
               <Desc>{p.description}</Desc>
-              <DateText>{p.date}</DateText>
-            </Content>
+              <DateText>{p.data}</DateText>
+            </Info>
           </Card>
         ))}
-      </Grid>
+      </List>
     </Container>
   );
 }
@@ -115,8 +79,8 @@ const Container = styled.section`
 const Filters = styled.div`
   display: flex;
   gap: ${({ theme }) => theme.space.sm};
-  margin-bottom: ${({ theme }) => theme.space.md};
   flex-wrap: wrap;
+  margin-bottom: ${({ theme }) => theme.space.md};
 `;
 
 const FilterButton = styled.button<{ active: boolean }>`
@@ -128,60 +92,65 @@ const FilterButton = styled.button<{ active: boolean }>`
   border: none;
   border-radius: 4px;
   cursor: pointer;
+
   &:hover {
     opacity: 0.8;
   }
 `;
 
-const Grid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: ${({ theme }) => theme.space.md};
-
-  @media (max-width: 768px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  @media (max-width: 480px) {
-    grid-template-columns: 1fr;
-  }
+const List = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.space.lg};
 `;
 
 const Card = styled.article`
+  display: flex;
+  align-items: center;
   background: #fff;
   border-radius: 8px;
   overflow: hidden;
   box-shadow:
     0 2px 4px rgba(0,0,0,0.05),
     0 4px 8px rgba(0,0,0,0.05);
-  display: flex;
-  flex-direction: column;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+  }
 `;
 
 const Media = styled.div`
-  width: 100%;
-  height: 0;
-  padding-top: 56.25%; /* 16:9 */
+  flex: none;
+  width: 200px;
+  height: 120px;
   position: relative;
-  overflow: hidden;
   background: #000;
 
   iframe, img {
     position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
+    inset: 0;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
+  }
+
+  @media (max-width: 600px) {
+    width: 100%;
+    height: 180px;
   }
 `;
 
-const Content = styled.div`
-  padding: ${({ theme }) => theme.space.md};
+const Info = styled.div`
   flex: 1;
+  padding: ${({ theme }) => theme.space.md};
   display: flex;
   flex-direction: column;
 `;
 
 const Title = styled.h3`
   margin: 0 0 ${({ theme }) => theme.space.sm} 0;
+  font-size: 1.5rem;
+  color: ${({ theme }) => theme.colors.primary};
 `;
 
 const Desc = styled.p`
@@ -191,8 +160,18 @@ const Desc = styled.p`
 `;
 
 const DateText = styled.time`
+  align-self: flex-end;
   font-size: 0.875rem;
   color: ${({ theme }) => theme.colors.text};
-  text-align: right;
 `;
 
+const Loading = styled.div`
+  padding: ${({ theme }) => theme.space.lg};
+  text-align: center;
+`;
+
+const Error = styled.div`
+  padding: ${({ theme }) => theme.space.lg};
+  color: red;
+  text-align: center;
+`;

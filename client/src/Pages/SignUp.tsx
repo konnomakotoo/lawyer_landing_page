@@ -6,7 +6,7 @@ import { useLocation, useNavigate } from "react-router-dom"
 import type { AppDispatch } from "../redux/store/redux.store";
 import { fetchSignUpUser } from "../redux/slices/userSlice";
 import { useState } from "react";
-import { FormTitle, FormWrapper, Icon, IconEye, InputWrapper, StyledButton, StyledError, StyledForm, StyledInput } from "../ui-kit/Form";
+import { FormTitle, FormWrapper, Icon, IconEye, InputWrapper, StyledButton, StyledError, StyledForm, StyledInput, StyledLine, StyledLineOr, StyledOr, StyledText, StyledtextClicked, StyledTextContainer } from "../ui-kit/Form";
 import PersonIcon from "../Icons/PersonIcon";
 import MailIcon from "../Icons/MailIcon";
 import PhoneIcon from "../Icons/PhoneIcon";
@@ -66,6 +66,11 @@ const SignUp: React.FC = () => {
 }
 };
 
+// const handleGoogleSignup = () => {
+//     // редиректим на эндпоинт бэка, который стартует Google OAuth
+//     window.location.href = '/api/auth/google';
+//   };
+
     return (
         <FormWrapper>
           <FormTitle>Регистрация</FormTitle>
@@ -110,14 +115,19 @@ const SignUp: React.FC = () => {
             <IconEye onClick={() => setShowPassword((prev) => !prev)}>{showPassword ? <EyeOpenIcon /> : <EyeClosedIcon />}</IconEye>
             </InputWrapper>
             {errors.confirmPassword && <StyledError>{errors?.confirmPassword?.message}</StyledError>}
-            <StyledInput className="signup-button" type="submit" value="Отправить" />
-            <StyledButton
-              className="signup-button"
-              onClick={() => navigate("/login")}
-              style={{ color: "black" }}
-            >
-              Уже зарегистрирован
-            </StyledButton>
+            <StyledButton  type="submit">Отправить </StyledButton>
+            <StyledLineOr>
+              <StyledLine />
+              <StyledOr>OR</StyledOr>
+              <StyledLine />
+            </StyledLineOr>
+            <StyledTextContainer>
+              <StyledText>Уже зарегестрирован?</StyledText>
+              <StyledtextClicked onClick={() => navigate("/login")}>Войти</StyledtextClicked>
+            </StyledTextContainer>
+            {/* <div onClick={handleGoogleSignup}>
+            <GoogleIcon />
+            </div> */}
           </StyledForm>
           </FormWrapper>
     );

@@ -6,6 +6,8 @@ export const theme: DefaultTheme = {
     secondary: '#0C253F',
     text: '#333333',
     textOnPrimary: '#FFFFFF',
+    backgroundAlt: '#F6FAFC',
+    textOnBackground: '#0C253F'
   },
   space: {
     sm: '0.5rem',
@@ -14,7 +16,7 @@ export const theme: DefaultTheme = {
   },
   fonts: {
     body: '"Rubik", sans-serif',
-    heading: '"Rubik", sans-serif',
+    heading: '"Cantata One", serif',
     monospace: '"Menlo", monospace',
   },
 };

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="200"
+   height="200"
+   viewBox="0 0 366 486"
+   fill="none"
+   version="1.1"
+   id="svg3"
+   sodipodi:docname="representation.svg"
+   inkscape:version="1.4.2 (f4327f4, 2025-05-13)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs3" />
+  <sodipodi:namedview
+     id="namedview3"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="2.191358"
+     inkscape:cx="183.21972"
+     inkscape:cy="243"
+     inkscape:window-width="2160"
+     inkscape:window-height="1346"
+     inkscape:window-x="-11"
+     inkscape:window-y="-11"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg3" />
+  <path
+     d="M53.8183 486.007V376.153C23.8685 374.789 15.7984 355.296 12.1044 331.313C8.86504 309.945 3.9776 288.86 0.738249 267.492C-2.5011 246.123 8.29672 234.473 29.4946 234.416C131.79 234.151 234.085 234.151 336.38 234.416C357.521 234.416 368.831 245.385 364.796 267.151C360.83 295.675 354.906 323.892 347.064 351.602C343.484 362.968 328.708 370.299 313.591 384.678V485.894L53.8183 486.007ZM261.591 330.859H105.08V435.655H261.591V330.859Z"
+     fill="black"
+     id="path1"
+     style="fill:#71b0d0;fill-opacity:1" />
+  <path
+     d="M287.165 199.579H79.1653C73.4822 175.198 76.3235 153.204 99.1694 141.099C111.729 134.45 129.744 130.188 142.531 133.995C156.909 138.315 168.162 152.977 181.176 163.491C208.341 152.125 225.106 109.729 264.547 138.485C285.915 154.114 292.28 172.697 287.165 199.579Z"
+     fill="black"
+     id="path2"
+     style="fill:#71b0d0;fill-opacity:1" />
+  <path
+     d="M182.143 117.912C214.691 117.912 241.076 91.5268 241.076 58.9786C241.076 26.4303 214.691 0.0446777 182.143 0.0446777C149.595 0.0446777 123.209 26.4303 123.209 58.9786C123.209 91.5268 149.595 117.912 182.143 117.912Z"
+     fill="black"
+     id="path3"
+     style="fill:#71b0d0;fill-opacity:1" />
+</svg>

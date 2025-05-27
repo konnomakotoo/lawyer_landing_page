@@ -27,17 +27,23 @@ module.exports = {
       address: {
         type: Sequelize.STRING
       },
+      area: {
+        type: Sequelize.STRING
+      },
       description: {
         type: Sequelize.TEXT
       },
       position: {
-        type: Sequelize.ARRAY(Sequelize.STRING),
+        type: Sequelize.STRING,
       },
       specialization: {
         type: Sequelize.ARRAY(Sequelize.STRING),
       },
-      awards: {
-        type: Sequelize.ARRAY(Sequelize.STRING),
+      experience: {
+        type: Sequelize.TEXT
+      },
+      education: {
+        type: Sequelize.TEXT
       },
       createdAt: {
         allowNull: false,
