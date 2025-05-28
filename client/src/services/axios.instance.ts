@@ -7,7 +7,7 @@ declare module "axios" {
 }
 
 const $api = axios.create({
-baseURL: "http://localhost:3000/api",
+baseURL: import.meta.env.VITE_SERVER_URL + "/api",
 headers: { "Content-Type": "application/json" },
 withCredentials: true,
 });
