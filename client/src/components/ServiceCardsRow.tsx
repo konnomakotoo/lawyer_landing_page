@@ -4,7 +4,7 @@ import { services } from '../data/services';
 
 const Section = styled.section`
   padding: 3rem 2rem;
-  background-color: ${({ theme }) => theme.colors.backgroundAlt || 'hsl(200, 20%, 95%)'};
+  margin-top: 60px;
 `;
 
 const Grid = styled.div`

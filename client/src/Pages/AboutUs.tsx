@@ -1,33 +1,31 @@
-// AboutUs.tsx
-import React, { useEffect, useRef } from 'react';
-import styled from 'styled-components';
-import { gsap } from 'gsap';
-import { SplitText } from 'gsap/SplitText';
-gsap.registerPlugin(SplitText);
+// src/components/AboutUsWave.tsx
+import React, { useEffect, useRef } from 'react'
+import styled, { keyframes, css } from 'styled-components'
+import { gsap } from 'gsap'
 
-const Container = styled.section`
-  position: relative;
-  width: 100%;
+const slideInFade = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`
+
+const Section = styled.section`
+  margin-top: 60px;
   padding: 4rem 2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: ${({ theme }) => theme.colors.backgroundAlt || '#f9f9f9'};
-  color: ${({ theme }) => theme.colors.text};
+  background-color: ${({ theme }) => theme.colors.backgroundAlt || '#f9f9f9'};
+  color: ${({ theme }) => theme.colors.text || '#333'};
+  text-align: center;
   overflow: hidden;
-
-  @media (max-width: 768px) {
-    padding: 3rem 1.5rem;
-  }
-  @media (max-width: 480px) {
-    padding: 2rem 1rem;
-  }
-`;
+`
 
 const Title = styled.h2`
   font-size: 2.5rem;
-  margin-bottom: 1rem;
-  text-align: center;
+  margin-bottom: 1.5rem;
 
   @media (max-width: 768px) {
     font-size: 2rem;
@@ -35,15 +33,20 @@ const Title = styled.h2`
   @media (max-width: 480px) {
     font-size: 1.75rem;
   }
-`;
+`
 
-const AnimateMe = styled.div`
+const TextBlock = styled.p<{ visible: boolean }>`
   font-size: 1.125rem;
   line-height: 1.6;
   max-width: 800px;
-  text-align: center;
-  opacity: 0; /* появится через GSAP */
-  perspective: 500px;
+  margin: 0 auto 2rem;
+  opacity: 0;
+
+  ${({ visible }) =>
+    visible &&
+    css`
+      animation: ${slideInFade} 0.8s ease-out forwards;
+    `}
 
   @media (max-width: 768px) {
     font-size: 1rem;
@@ -51,42 +54,33 @@ const AnimateMe = styled.div`
   @media (max-width: 480px) {
     font-size: 0.9rem;
   }
-`;
-
-const SrOnly = styled.p`
-  &:not(:focus):not(:active) {
-    clip: rect(0 0 0 0);
-    clip-path: inset(50%);
-    height: 1px;
-    overflow: hidden;
-    position: absolute;
-    white-space: nowrap;
-    width: 1px;
-  }
-`;
+`
 
 const Counters = styled.div`
   display: flex;
   gap: 2rem;
-  margin: 3rem 0;
   flex-wrap: wrap;
   justify-content: center;
+  margin-top: 2rem;
+`
 
-  @media (max-width: 480px) {
-    gap: 1rem;
-  }
-`;
-
-const CounterBlock = styled.div`
+const CounterBlock = styled.div<{ visible: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
-`;
+  opacity: 0;
+
+  ${({ visible }) =>
+    visible &&
+    css`
+      animation: ${slideInFade} 0.8s ease-out forwards;
+    `}
+`
 
 const CounterNumber = styled.span`
   font-size: 2.5rem;
   font-weight: bold;
-  color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.colors.primary || '#007acc'};
 
   @media (max-width: 768px) {
     font-size: 2rem;
@@ -94,7 +88,7 @@ const CounterNumber = styled.span`
   @media (max-width: 480px) {
     font-size: 1.75rem;
   }
-`;
+`
 
 const CounterLabel = styled.span`
   margin-top: 0.25rem;
@@ -104,14 +98,20 @@ const CounterLabel = styled.span`
   @media (max-width: 480px) {
     font-size: 0.9rem;
   }
-`;
+`
 
-const InfoText = styled.p`
+const InfoText = styled.p<{ visible: boolean }>`
   max-width: 700px;
-  text-align: center;
+  margin: 2rem auto 0;
   font-size: 1rem;
   line-height: 1.6;
-  margin-top: 2rem;
+  opacity: 0;
+
+  ${({ visible }) =>
+    visible &&
+    css`
+      animation: ${slideInFade} 0.8s ease-out forwards;
+    `}
 
   @media (max-width: 768px) {
     font-size: 0.95rem;
@@ -119,124 +119,109 @@ const InfoText = styled.p`
   @media (max-width: 480px) {
     font-size: 0.9rem;
   }
-`;
+`
 
-export default function AboutUs() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const animateRef = useRef<HTMLDivElement>(null);
-  const splitRef = useRef<SplitText | null>(null);
+export default function AboutUsWave() {
+  const textRef = useRef<HTMLParagraphElement | null>(null)
+  const attorneysRef = useRef<HTMLSpanElement | null>(null)
+  const casesRef = useRef<HTMLSpanElement | null>(null)
+  const citiesRef = useRef<HTMLSpanElement | null>(null)
+  const clientsRef = useRef<HTMLSpanElement | null>(null)
+  const infoRef = useRef<HTMLParagraphElement | null>(null)
 
-  // Сделаем все четыре счётчика рефами, которые могут быть null
-  const attorneysRef = useRef<HTMLSpanElement | null>(null);
-  const casesRef     = useRef<HTMLSpanElement | null>(null);
-  const citiesRef    = useRef<HTMLSpanElement | null>(null);
-  const clientsRef   = useRef<HTMLSpanElement | null>(null);
+  const [textVisible, setTextVisible] = React.useState(false)
+  const [countersVisible, setCountersVisible] = React.useState(false)
+  const [infoVisible, setInfoVisible] = React.useState(false)
 
   const TARGETS = {
     attorneys: 50,
-    cases:     200,
-    cities:    15,
-    clients:   1000,
-  };
+    cases: 200,
+    cities: 15,
+    clients: 1000,
+  }
 
   useEffect(() => {
-    const runAnimation = () => {
-      if (!containerRef.current || !animateRef.current) return;
-
-      gsap.set(containerRef.current, { opacity: 1 });
-
-      splitRef.current = new SplitText(animateRef.current, {
-        type: 'words',
-        wordsClass: 'split-word',
-      });
-
-      gsap.from(splitRef.current.words, {
-        opacity: 0,
-        y: 50,
-        rotationX: 90,
-        duration: 1.2,
-        ease: 'sine.out',
-        stagger: 0.1,
-      });
-
-      // Обновлённая сигнатура: реф может быть null
-      const animateNumber = (
-        ref: React.RefObject<HTMLSpanElement | null>,
-        end: number,
-        delay = 0
-      ) => {
-        if (!ref.current) return;
-        const obj = { val: 0 };
-        gsap.to(obj, {
-          val: end,
-          duration: 2,
-          ease: 'power1.out',
-          delay,
-          onUpdate: () => {
-            if (ref.current) {
-              ref.current.textContent = Math.floor(obj.val).toLocaleString();
-            }
-          },
-        });
-      };
-
-      animateNumber(attorneysRef, TARGETS.attorneys, 1);
-      animateNumber(casesRef,     TARGETS.cases,     1.2);
-      animateNumber(citiesRef,    TARGETS.cities,    1.4);
-      animateNumber(clientsRef,   TARGETS.clients,   1.6);
-    };
-
-    if (document.fonts?.ready) {
-      document.fonts.ready.then(runAnimation);
-    } else {
-      runAnimation();
+    // Плавно показываем текст
+    if (textRef.current) {
+      setTextVisible(true)
     }
 
-    return () => {
-      splitRef.current?.revert();
-    };
-  }, []);
+    // Запускаем анимации чисел с небольшой задержкой
+    const animateNumber = (
+      ref: React.RefObject<HTMLSpanElement | null>,
+      end: number,
+      delay = 0
+    ) => {
+      if (!ref.current) return
+      const obj = { val: 0 }
+      gsap.to(obj, {
+        val: end,
+        duration: 1.2,
+        ease: 'power1.out',
+        delay,
+        onUpdate: () => {
+          if (ref.current) {
+            ref.current.textContent = Math.floor(obj.val).toLocaleString()
+          }
+        },
+      })
+    }
 
-  const content = (
-    <>
-      Наша коллегия объединяет <strong>{TARGETS.attorneys}</strong> опытных адвокатов,
-      мы выиграли более <strong>{TARGETS.cases}</strong> дел, работаем в{' '}
-      <strong>{TARGETS.cities}</strong> городах и уже помогли{' '}
-      <strong>{TARGETS.clients.toLocaleString()}</strong> довольным клиентам.
-    </>
-  );
+    // Немного задержим показ счётчиков, чтобы текст появился первым
+    const timer1 = setTimeout(() => {
+      setCountersVisible(true)
+      animateNumber(attorneysRef, TARGETS.attorneys, 0)
+      animateNumber(casesRef, TARGETS.cases, 0.2)
+      animateNumber(citiesRef, TARGETS.cities, 0.4)
+      animateNumber(clientsRef, TARGETS.clients, 0.6)
+    }, 500)
+
+    // Затем показываем информационный текст
+    const timer2 = setTimeout(() => {
+      setInfoVisible(true)
+    }, 1000)
+
+    return () => {
+      clearTimeout(timer1)
+      clearTimeout(timer2)
+    }
+  }, [])
 
   return (
-    <Container ref={containerRef}>
+    <Section>
       <Title>О нашей компании</Title>
-      <AnimateMe ref={animateRef} aria-hidden="true">
-        {content}
-      </AnimateMe>
-      <SrOnly>{content}</SrOnly>
+
+      <TextBlock ref={textRef} visible={textVisible}>
+        Наша коллегия объединяет <strong>{TARGETS.attorneys}</strong> опытных
+        адвокатов, мы выиграли более <strong>{TARGETS.cases}</strong> дел,
+        работаем в <strong>{TARGETS.cities}</strong> городах и уже помогли{' '}
+        <strong>{TARGETS.clients.toLocaleString()}</strong> довольным клиентам.
+      </TextBlock>
 
       <Counters>
-        <CounterBlock>
+        <CounterBlock visible={countersVisible}>
           <CounterNumber ref={attorneysRef}>0</CounterNumber>
           <CounterLabel>Адвокатов</CounterLabel>
         </CounterBlock>
-        <CounterBlock>
+        <CounterBlock visible={countersVisible}>
           <CounterNumber ref={casesRef}>0</CounterNumber>
           <CounterLabel>Выигранных дел</CounterLabel>
         </CounterBlock>
-        <CounterBlock>
+        <CounterBlock visible={countersVisible}>
           <CounterNumber ref={citiesRef}>0</CounterNumber>
           <CounterLabel>Городов</CounterLabel>
         </CounterBlock>
-        <CounterBlock>
+        <CounterBlock visible={countersVisible}>
           <CounterNumber ref={clientsRef}>0</CounterNumber>
           <CounterLabel>Клиентов</CounterLabel>
         </CounterBlock>
       </Counters>
 
-      <InfoText>
-        Мы предоставляем полный спектр юридических услуг: защита в суде, консультации по недвижимости,
-        споры с контрагентами и многое другое. Наша миссия — защищать ваши права на каждом этапе.
+      <InfoText ref={infoRef} visible={infoVisible}>
+        Мы предоставляем полный спектр юридических услуг: защита в суде,
+        консультации по недвижимости, споры с контрагентами и многое другое.
+        Наша миссия — защищать ваши права на каждом этапе.
       </InfoText>
-    </Container>
-  );
+    </Section>
+  )
 }

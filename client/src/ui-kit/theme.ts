@@ -4,6 +4,8 @@ export const theme: DefaultTheme = {
   colors: {
     primary: '#75B1CE',
     secondary: '#0C253F',
+    buttons: '#E07A5F',
+    icons: '#D4A15B',
     text: '#333333',
     textOnPrimary: '#FFFFFF',
     backgroundAlt: '#F6FAFC',
