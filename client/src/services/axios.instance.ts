@@ -7,7 +7,7 @@ declare module "axios" {
 }
 
 const $api = axios.create({
-baseURL: import.meta.env.VITE_SERVER_URL + "/api",
+baseURL: "https://api.bakaevpartners.ru/api",
 headers: { "Content-Type": "application/json" },
 withCredentials: true,
 });
