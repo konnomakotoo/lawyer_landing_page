@@ -19,18 +19,20 @@ services:
     networks:
       - web
 
-  client:
-    build:
-      context: ./client
-      dockerfile: Dockerfile
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.client.rule=Host(`bakaevpartners.ru`)"
-      - "traefik.http.routers.client.entrypoints=websecure"
-      - "traefik.http.routers.client.tls.certresolver=le"
-      - "traefik.http.services.client.loadbalancer.server.port=80"
-    networks:
-      - web
+client:
+  build:
+    context: ./client
+    dockerfile: Dockerfile
+  labels:
+    - "traefik.enable=true"
+    - "traefik.http.routers.client.entrypoints=web,websecure"
+    - "traefik.http.routers.client.rule=Host(`bakaevpartners.ru`)"
+    - "traefik.http.routers.client.tls.certresolver=le"
+    - "traefik.http.routers.client.middlewares=redirect-to-https@docker"
+    - "traefik.http.services.client.loadbalancer.server.port=80"
+    - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+  networks:
+    - web
 
   server:
     build:
