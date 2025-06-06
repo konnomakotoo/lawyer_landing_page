@@ -12,6 +12,6 @@ providers:
 certificatesResolvers:
   le:
     acme:
-      email: bakaevpartners.ru
+      email: kermengm@gmail.com
       storage: /letsencrypt/acme.json
       tlsChallenge: {}

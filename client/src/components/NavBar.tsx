@@ -1,29 +1,37 @@
-// NavBar.tsx
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useSelector } from "react-redux";
-import type { RootState } from '../redux/store/redux.store';
-import styled from 'styled-components';
-import Logo from '../Icons/Logo';
-import PersonIcon from '../Icons/PersonIcon';
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useSelector } from "react-redux"
+import type { RootState } from '../redux/store/redux.store'
+import styled from 'styled-components'
+import Logo from '../Icons/Logo'
+import PersonIcon from '../Icons/PersonIcon'
 
 type NavItem = {
-  label: React.ReactNode;
-  to: string;
-  isIcon?: boolean;
-};
+  label: React.ReactNode
+  to: string
+  isIcon?: boolean
+}
 
 const NavBarContainer = styled.header`
-  position: relative;
-  max-height: 58px;
+  position: fixed;        /* Фиксируем шапку наверху */
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;           /* Делаем её ровно 60px */
+  z-index: 1000;          /* Чтобы Navbar всегда был поверх контента */
+  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  background: transparent;
   padding: ${({ theme }) => theme.space.md};
-  background-color: ${({ theme }) => theme.colors.primary};
   color: ${({ theme }) => theme.colors.textOnPrimary};
   font-size: 1rem;
-`;
+
+  @media (max-width: 1024px) {
+    padding: ${({ theme }) => theme.space.sm};
+  }
+`
 
 const DesktopNav = styled.nav`
   display: flex;
@@ -35,8 +43,10 @@ const DesktopNav = styled.nav`
 
   button {
     background: none;
-    border: none;
-    color: inherit;
+    border: .5px solid black;
+    border-radius: 10px;
+    padding: 5px 15px;
+    color: ${({ theme }) => theme.colors.buttons};
     cursor: pointer;
     font: inherit;
   }
@@ -51,12 +61,13 @@ const AuthNav = styled.div`
   }
 
   button {
-    background: none;
+    background: ${({ theme }) => theme.colors.primary};
     border: none;
-    color: inherit;
+    border-radius: 5px;
+    color: ${({ theme }) => theme.colors.secondary};
     cursor: pointer;
     font: inherit;
-    padding: 0;
+    padding: 10px 15px;
   }
 `;
 
@@ -73,13 +84,13 @@ const BurgerButton = styled.button`
   }
 `;
 
-const MobileMenu = styled.div<{ isOpen: boolean }>`
+const MobileMenu = styled.div<{ $isOpen: boolean }>`
   position: absolute;
   top: 100%;
   left: 0;
   right: 0;
   background: ${({ theme }) => theme.colors.primary};
-  display: ${({ isOpen }) => (isOpen ? 'flex' : 'none')};
+  display: ${({ $isOpen }) => ($isOpen ? 'flex' : 'none')};
   flex-direction: column;
   gap: 1rem;
   padding: ${({ theme }) => theme.space.md};
@@ -172,7 +183,7 @@ export default function NavBar() {
         {menuOpen ? <CloseIcon /> : <BurgerIcon />}
       </BurgerButton>
 
-      <MobileMenu isOpen={menuOpen}>
+      <MobileMenu $isOpen={menuOpen}>
         {navItems.map(item => (
           <button key={item.to}
             onClick={() => {

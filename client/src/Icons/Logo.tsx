@@ -3,8 +3,8 @@ export default function Logo() {
 <svg
    version="1.1"
    id="svg1"
-   width="100"
-   height="100"
+   width="110px"
+   height="110px"
    viewBox="0 0 1706.6667 1088"
    xmlns="http://www.w3.org/2000/svg">
   <defs
