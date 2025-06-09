@@ -8,7 +8,7 @@ const app = express();
 app.use(
 cors({
 origin: ["http://localhost:5173", "https://bakaevpartners.ru"],
-methods: ["GET", "POST", "PUT", "DELETE"],
+methods: ["GET","POST","PUT","DELETE","OPTIONS"],
 allowedHeaders: ["Authorization", "Content-Type"],
 credentials: true,
 })
