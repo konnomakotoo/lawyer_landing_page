@@ -14,7 +14,6 @@ credentials: true,
 })
 );
 
-app.options("*", cors());
 
 
 app.use(express.json());
