@@ -5,11 +5,13 @@ declare module "axios" {
     setAccessToken(token: string): void;
   }
 }
+// "https://api.bakaevpartners.ru/api"
+// "http://localhost:3000/api";
 
 const $api = axios.create({
-baseURL: "https://api.bakaevpartners.ru/api",
-headers: { "Content-Type": "application/json" },
-withCredentials: true,
+  baseURL: "https://api.bakaevpartners.ru/api",
+  headers: { "Content-Type": "application/json" },
+  withCredentials: true,
 });
 
 let accessToken = "";

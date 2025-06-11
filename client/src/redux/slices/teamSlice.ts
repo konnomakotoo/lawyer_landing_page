@@ -34,9 +34,12 @@ export const fetchTeam = createAsyncThunk(
     async () => {
         try {
             const response = await $api.get('/team');
+            console.log('RESPONSE', response)
+            console.log('RES DATA', response.data)
             return response.data;
         } catch (err) {
             console.log('Ошибка с бэка team', err);
+            return []
         }
     }
 );
