@@ -10,14 +10,15 @@ declare module 'styled-components' {
       text: string;
       textOnPrimary: string;
       backgroundAlt?: string;
-      textOnBackground: string,
+      textOnBackground: string;
+      block: string;
     };
     space: {
       sm: string;
       md: string;
       lg: string;
     };
-     fonts: {
+    fonts: {
       body: string;
       heading: string;
       monospace: string;

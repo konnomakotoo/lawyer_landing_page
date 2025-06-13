@@ -1,8 +1,7 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
-import BrushIcon from "../Icons/BrushIcon";
 
-// Slide-in animations
+// Animations
 const slideInDown = keyframes`
   from { opacity: 0; transform: translateY(-30px); }
   to   { opacity: 1; transform: translateY(0);     }
@@ -12,144 +11,91 @@ const slideInUp = keyframes`
   to   { opacity: 1; transform: translateY(0);    }
 `;
 
-// Wrapper for entire section
+// Wrapper for title section without background
 const SectionWrapper = styled.div`
   width: 100%;
-  height: 100%;
-  overflow: visible;
+  text-align: center;
+  padding: 2rem 1rem; /* Текст повыше */
 `;
 
-// Top part
-const TopSection = styled.section`
-  display: flex;
-  margin: 0 auto;
-  width: 50%;
-  height: 45%;
-  padding-top: 4rem;
-  align-items: center;
-  justify-content: center;
-  gap: 40px;
-  @media (max-width: 768px) {
-    flex-direction: column;
-    text-align: center;
-    width: 90%;
-  }
-`;
-const TextContainer = styled.div`
-  flex: 1;
-`;
+// Title and description
 const Title = styled.h2`
-  font-size: 2rem;
-  margin: 0;
+  font-size: 2.5rem;
+  margin: 0 auto;
   color: ${({ theme }) => theme.colors.secondary};
-  position: relative;
-  display: inline-block;
   opacity: 0;
-  animation: ${slideInDown} 0.8s ease-out 0.1s forwards;
-  & .icon {
-    position: absolute;
-    top: 60%;
-    left: 50%;
-    transform: translate(-50%, -40%);
-    z-index: -1;
-    opacity: 0.5;
-  }
+  animation: ${slideInDown} 0.8s ease-out forwards;
 `;
 const Desc = styled.p`
-  margin: 1rem 0 0;
-  font-size: 1.1rem;
-  line-height: 1.4;
+  margin: 1rem auto 2rem;
+  max-width: 800px;
+  font-size: 1.2rem;
+  line-height: 1.5;
   opacity: 0;
-  animation: ${slideInDown} 0.8s ease-out 0.3s forwards;
-`;
-const ButtonAboutUs = styled.button`
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  margin-top: 4%;
-  border: none;
-  cursor: pointer;
-  transition: opacity 0.2s;
-  background-color: ${({ theme }) => theme.colors.buttons};
-  &:hover {
-    opacity: 0.9;
-  }
-`;
-const RightImage = styled.img`
-  flex: 1;
-  max-width: 300px;
-  width: 100%;
-  border-radius: 8px;
-  box-shadow: 10px 10px #d4a15b;
-  opacity: 0;
-  animation: ${slideInDown} 0.8s ease-out 0.5s forwards;
+  animation: ${slideInDown} 0.8s ease-out 0.2s forwards;
 `;
 
-// Bottom part with 6 specialization cards in 2 rows
-const BottomSection = styled.section`
-  
-  text-align: center;
-  padding: 1.4rem;
-  height: 55%;
-`;
-const Subtitle = styled.h3`
-  font-size: 1.8rem;
-  margin-bottom: 2rem;
-  color: ${({ theme }) => theme.colors.secondary};
-  opacity: 0;
-  animation: ${slideInDown} 0.8s ease-out 0.7s forwards;
+// Background with diagonal split for specialization section
+const BackgroundSection = styled.div`
+  background: linear-gradient(
+    135deg,
+    ${({ theme }) => theme.colors.textOnPrimary} 50%,
+    #f4f4f4 50%
+  );
+  padding: 2rem 1rem;
 `;
 
-// Grid layout without gap, using borders as separators
+// Grid for specializations
 const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-gap: 0;
-  max-width: 1000px;
+  gap: 3rem;
+  max-width: 1200px;
   margin: 0 auto;
 `;
 
-const Card = styled.div<{ delay?: number }>`
-  box-sizing: border-box;
+const Card = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: relative;
-  padding: 2rem;
-  opacity: 0;
-  animation: ${slideInUp} 0.6s ease-out ${(props) => props.delay || 0}s forwards;
+`;
 
-  border-right: 2px solid rgba(226, 23, 23, 0.3);
-  border-bottom: 2px solid rgba(177, 16, 16, 0.3);
-  &:nth-child(3n) {
-    border-right: none;
-  }
-  &:nth-child(n + 4) {
-    border-bottom: none;
-  }
-`;
-const CardImage = styled.img<{ delay?: number }>`
-  width: 80px;
-  height: 80px;
-  object-fit: cover;
+// Larger circle image with full black overlay
+const CardImage = styled.div`
+  position: relative;
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
-  margin-bottom: 0.75rem;
+  overflow: hidden;
+  margin-bottom: 1rem;
   opacity: 0;
-  animation: ${slideInDown} 0.8s ease-out
-    ${(props) => (props.delay || 0) + 0.1}s forwards;
+  animation: ${slideInUp} 0.6s ease-out forwards;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%; /* Полностью */
+    background: rgba(0, 0, 0, 0.6); /* Черное наложение */
+  }
 `;
-const CardLabel = styled.span<{ delay?: number }>`
+
+const CardLabel = styled.span`
   font-size: 1rem;
   color: ${({ theme }) => theme.colors.icons};
   opacity: 0;
-  animation: ${slideInUp} 0.6s ease-out ${(props) => (props.delay || 0) + 0.2}s
-    forwards;
-  transition: color 0.2s;
-  ${Card}:hover & {
-    color: ${({ theme }) => theme.colors.icons};
-  }
+  animation: ${slideInUp} 0.6s ease-out 0.2s forwards;
+  text-align: center;
 `;
 
-// Data array with 6 items
+// Data
 const specializations = [
   "Судебная защита бизнеса",
   "Налоговое консультирование",
@@ -168,34 +114,25 @@ const images = [
 ];
 
 export const AboutUsSection: React.FC = () => (
-  <SectionWrapper>
-    <TopSection>
-      <TextContainer>
-        <Title>
-          О партнерстве
-          <div className="icon">
-            <BrushIcon />
-          </div>
-        </Title>
-        <Desc>
-          Партнёрство «Бакаев и Партнеры» объединяет адвокатов-профессионалов
-          Москвы, Московской области и регионов России со стажем более 10 лет.
-        </Desc>
-        <ButtonAboutUs>Подробнее</ButtonAboutUs>
-      </TextContainer>
-      <RightImage src="/statue.jpeg" alt="О партнерстве" />
-    </TopSection>
-
-    <BottomSection>
-      <Subtitle>Наши специализации</Subtitle>
+  <>
+    <SectionWrapper>
+      <Title>О партнерстве</Title>
+      <Desc>
+        Партнёрство «Бакаев и Партнеры» объединяет адвокатов-профессионалов
+        Москвы, Московской области и регионов России со стажем более 10 лет.
+      </Desc>
+    </SectionWrapper>
+    <BackgroundSection>
       <Grid>
         {specializations.map((label, idx) => (
-          <Card key={idx} delay={idx * 0.2}>
-            <CardImage src={images[idx]} alt={label} delay={idx * 0.2} />
-            <CardLabel delay={idx * 0.2}>{label}</CardLabel>
+          <Card key={idx}>
+            <CardImage>
+              <img src={images[idx]} alt={label} />
+            </CardImage>
+            <CardLabel>{label}</CardLabel>
           </Card>
         ))}
       </Grid>
-    </BottomSection>
-  </SectionWrapper>
+    </BackgroundSection>
+  </>
 );

@@ -17,7 +17,7 @@ const NavBarContainer = styled.header`
   top: 0;
   left: 0;
   right: 0;
-  height: 60px;           /* Делаем её ровно 60px */
+  height: 80px;           /* Делаем её ровно 60px */
   z-index: 1000;          /* Чтобы Navbar всегда был поверх контента */
   margin: 0 auto;
   display: flex;
@@ -36,6 +36,10 @@ const NavBarContainer = styled.header`
 const DesktopNav = styled.nav`
   display: flex;
   gap: 1rem;
+  border: 0.5px solid black;
+  border-radius: 30px;
+  padding: 15px 25px;
+  background: ${({ theme }) => theme.colors.secondary};
 
   @media (max-width: 768px) {
     display: none;
@@ -43,10 +47,8 @@ const DesktopNav = styled.nav`
 
   button {
     background: none;
-    border: .5px solid black;
-    border-radius: 10px;
-    padding: 5px 15px;
-    color: ${({ theme }) => theme.colors.buttons};
+    border: none;
+    color: ${({ theme }) => theme.colors.textOnPrimary};
     cursor: pointer;
     font: inherit;
   }
@@ -63,7 +65,7 @@ const AuthNav = styled.div`
   button {
     background: ${({ theme }) => theme.colors.primary};
     border: none;
-    border-radius: 5px;
+    border-radius: 30px;
     color: ${({ theme }) => theme.colors.secondary};
     cursor: pointer;
     font: inherit;

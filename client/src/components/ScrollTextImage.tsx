@@ -19,12 +19,15 @@ const HeroContainer = styled.div`
 
 // Background image
 const HeroImage = styled.div`
+z-index: 0;
   width: 100%;
-  height: 80vh;
-  background: url("/booksclose.jpg") center/cover no-repeat;
+  height: 60vh;
+  background: url("/mainpage.jpg") center/cover no-repeat;
+  border
   position: relative;
   &::after {
     content: "";
+    height: 60vh;
     position: absolute;
     inset: 0;
     background-color: rgba(24, 24, 31, 0.6);
@@ -39,7 +42,7 @@ const HeroContent = styled.div`
   transform: translate(-50%, -50%);
   color: #fff;
   text-align: center;
-  max-width: 90%;
+  width: 90%;
   h2 {
     font-size: 3rem;
     margin-bottom: 1rem;
@@ -50,7 +53,11 @@ const HeroContent = styled.div`
   }
   form {
     display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
     gap: 12px;
+    width: 85%;
     input {
       padding: 10px 14px;
       border: none;
@@ -68,54 +75,50 @@ const HeroContent = styled.div`
   }
 `;
 
+const HeroBottomContent = styled.div`
+  z-index: 10;
+  width: 100%;
+  height: 40vh;
+  border-radius: 20% 20% 0 0;
+  position: relative;
+`;
+
 // Squares overlap bottom of image with animation when visible and count up
 const SquaresContainer = styled.div`
-  position: absolute;
-  bottom: 22%;
-  left: 50%;
-  transform: translateX(-50%) translateY(50%);
   display: flex;
-  gap: 30px;
-  z-index: 2;
+  justify-content: center;
+  align-items: center;
+  gap: 1%;
 `;
 
 const Square = styled.div<{ delay: number }>`
-  background-color: ${({ theme }) => theme.colors.secondary};
-  color: ${({ theme }) => theme.colors.textOnPrimary};
+  background-color: ${({ theme }) => theme.colors.block};
+  color: ${({ theme }) => theme.colors.primary};
+  text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.2);
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  width: 400px;
-  height: 400px;
-  padding: 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  width: 250px;
+  height: 250px;
+  margin-top: 20px;
   text-align: center;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 10px;
   opacity: 0;
   ${({ delay }) =>
     css`
       animation: ${slideInFade} 0.8s ease-out ${delay}s forwards;
     `}
-  .icon-wrapper {
-    margin-bottom: 16px;
-    width: 70px;
-    height: 70px;
-    background-color: ${({ theme }) => theme.colors.textOnPrimary};
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 32px;
-  }
   span.number {
-    font-size: 2.5rem;
+    font-size: 2.8rem;
     font-weight: bold;
     margin-bottom: 0.5rem;
   }
   h2 {
     margin: 8px 0 4px;
-    font-size: 1.25rem;
+    font-size: 1.1rem;
   }
 `;
 
@@ -165,33 +168,36 @@ export default function StaticHero() {
     <HeroContainer>
       <HeroImage />
       <HeroContent>
-        <h2>МЫ НА ВАШЕЙ СТОРОНЕ</h2>
-        <div className="subtitle">в решении юридических вопросов любой сожности</div>
-        <div className="subtitle">Связаться с нами</div>
+        <h2>ПРОФЕССИОНАЛЬНАЯ ПОДДЕРЖКА В ЛЮБЫХ ЮРИДИЧЕСКИХ ВОПРОСАХ</h2>
+        <div className="subtitle">
+          От первичной консультации до полного судебного сопровождения
+        </div>
         <form>
           <input type="text" placeholder="Введите имя" />
           <input type="text" placeholder="Введите номер" />
           <button type="submit">Отправить</button>
         </form>
       </HeroContent>
-      <SquaresContainer>
-        {squaresData.map((sq, idx) => (
-          <Square key={idx} delay={idx * 0.2}>
-            <div className="icon-wrapper">
-              <AccountIcon />
-            </div>
-            <span
-              className="number"
-              ref={(el) => {
-                refs.current[idx] = el;
-              }}
-            >
-              0
-            </span>
-            <h2>{sq.title}</h2>
-          </Square>
-        ))}
-      </SquaresContainer>
+      <HeroBottomContent>
+        <SquaresContainer>
+          {squaresData.map((sq, idx) => (
+            <Square key={idx} delay={idx * 0.2}>
+              <div className="icon-wrapper">
+                <AccountIcon />
+              </div>
+              <span
+                className="number"
+                ref={(el) => {
+                  refs.current[idx] = el;
+                }}
+              >
+                0
+              </span>
+              <h2>{sq.title}</h2>
+            </Square>
+          ))}
+        </SquaresContainer>
+      </HeroBottomContent>
     </HeroContainer>
   );
 }

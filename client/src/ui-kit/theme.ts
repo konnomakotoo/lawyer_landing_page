@@ -2,19 +2,20 @@ import type { DefaultTheme } from 'styled-components';
 
 export const theme: DefaultTheme = {
   colors: {
-    primary: '#75B1CE',
-    secondary: '#0C253F',
-    buttons: '#E07A5F',
-    icons: '#D4A15B',
-    text: '#333333',
-    textOnPrimary: '#FFFFFF',
-    backgroundAlt: '#F6FAFC',
-    textOnBackground: '#0C253F'
+    primary: "#75B1CE",
+    secondary: "#0C253F",
+    buttons: "#E07A5F",
+    icons: "#D4A15B",
+    text: "#333333",
+    textOnPrimary: "#FFFFFF",
+    backgroundAlt: "#F6FAFC",
+    textOnBackground: "#0C253F",
+    block: "#F4F4F4",
   },
   space: {
-    sm: '0.5rem',
-    md: '1rem',
-    lg: '2rem',
+    sm: "0.5rem",
+    md: "1rem",
+    lg: "2rem",
   },
   fonts: {
     body: '"Rubik", sans-serif',
