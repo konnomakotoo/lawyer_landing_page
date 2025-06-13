@@ -47,11 +47,6 @@ services:
     build:
       context: ./server
       dockerfile: Dockerfile
-    env_file:
-      - ./.env
-      - ./server/.env
-    environment:
-      DB_HOST: db
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=web"
@@ -84,6 +79,8 @@ services:
       POSTGRES_DB:   ${DB_NAME}
     volumes:
       - db-data:/var/lib/postgresql/data
+    ports:
+      - "${DB_PORT}:5432"
     networks:
       - backend
 
