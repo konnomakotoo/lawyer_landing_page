@@ -1,11 +1,11 @@
-import { useState } from 'react'
+// import { useState } from 'react'
 import styled from 'styled-components'
 // import Slider from '../components/Slider/Slider'
-import { ConsultationForm } from './Consultation'
-import ServiceCardsRow from '../components/ServiceCardsRow'
-import TeamStrip from '../components/TeamStrip'
+// import { ConsultationForm } from './Consultation'
+// import ServiceCardsRow from '../components/ServiceCardsRow'
+// import TeamStrip from '../components/TeamStrip'
 import ParallaxContactSection from '../components/ContactSection' 
-import TestimonialSlider from '../components/Reviews'
+// import TestimonialSlider from '../components/Reviews'
 import { AboutUsSection } from '../components/AboutUsWave'
 import CallAndTeamSlider from '../components/CallAndTeamSlider'
 import RecentProjects from '../components/RecentProjects'
@@ -47,57 +47,57 @@ const SnapSection = styled.section`
   justify-content: center;
 `
 
-const ModalOverlay = styled.div`
-  position: fixed;
-  inset: 0; /* top:0; bottom:0; left:0; right:0; */
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-`
+// const ModalOverlay = styled.div`
+//   position: fixed;
+//   inset: 0; /* top:0; bottom:0; left:0; right:0; */
+//   background: rgba(0, 0, 0, 0.5);
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   z-index: 1000;
+// `
 
-const ModalContent = styled.div`
-  background: #fff;
-  border-radius: 8px;
-  max-width: 500px;
-  width: 90%;
-  max-height: 90%;
-  overflow-y: auto;
-  padding: ${({ theme }) => theme.space.lg};
-  position: relative;
+// const ModalContent = styled.div`
+//   background: #fff;
+//   border-radius: 8px;
+//   max-width: 500px;
+//   width: 90%;
+//   max-height: 90%;
+//   overflow-y: auto;
+//   padding: ${({ theme }) => theme.space.lg};
+//   position: relative;
 
-  @media (max-width: 480px) {
-    padding: ${({ theme }) => theme.space.md};
-  }
-`
+//   @media (max-width: 480px) {
+//     padding: ${({ theme }) => theme.space.md};
+//   }
+// `
 
-const CloseButton = styled.button`
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  background: transparent;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-`
+// const CloseButton = styled.button`
+//   position: absolute;
+//   top: 12px;
+//   right: 12px;
+//   background: transparent;
+//   border: none;
+//   font-size: 1.5rem;
+//   cursor: pointer;
+// `
 
-const ButtonMainPage = styled.button`
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  background: ${({ theme }) => theme.colors.buttons};
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-  color: red;
-`
+// const ButtonMainPage = styled.button`
+//   position: absolute;
+//   top: 12px;
+//   right: 12px;
+//   background: ${({ theme }) => theme.colors.buttons};
+//   border: none;
+//   font-size: 1.5rem;
+//   cursor: pointer;
+//   color: red;
+// `
 
 export default function MainPage() {
-  const [isModalOpen, setModalOpen] = useState(false)
+  // const [isModalOpen, setModalOpen] = useState(false)
 
-  const openModal = () => setModalOpen(true)
-  const closeModal = () => setModalOpen(false)
+  // const openModal = () => setModalOpen(true)
+  // const closeModal = () => setModalOpen(false)
 
   return (
     <HomeContainer>
