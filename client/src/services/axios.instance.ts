@@ -9,7 +9,7 @@ declare module "axios" {
 // "http://localhost:3000/api";
 
 const $api = axios.create({
-  baseURL: "https://api.bakaevpartners.ru/api",
+  baseURL: "https://bakaevpartners.ru/api",
   headers: { "Content-Type": "application/json" },
   withCredentials: true,
 });

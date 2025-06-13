@@ -1,284 +1,201 @@
-// src/components/AboutUsSection.tsx
-import React, { useEffect, useRef, useState } from 'react'
-import styled, { keyframes, css } from 'styled-components'
-import BrushIcon from '../Icons/BrushIcon'
+import React from "react";
+import styled, { keyframes } from "styled-components";
+import BrushIcon from "../Icons/BrushIcon";
 
-const slideInLeft = keyframes`
-  from { opacity: 0; transform: translateX(-50px); }
-  to   { opacity: 1; transform: translateX(0);      }
-`
-
+// Slide-in animations
 const slideInDown = keyframes`
   from { opacity: 0; transform: translateY(-30px); }
   to   { opacity: 1; transform: translateY(0);     }
-`
-
-const fadeInUp = keyframes`
-  from { opacity: 0; transform: translateY(20px); }
+`;
+const slideInUp = keyframes`
+  from { opacity: 0; transform: translateY(30px); }
   to   { opacity: 1; transform: translateY(0);    }
-`
+`;
 
-const SectionContainer = styled.section`
+// Wrapper for entire section
+const SectionWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+`;
+
+// Top part
+const TopSection = styled.section`
   display: flex;
-  gap: 20px;
-  width: 90%;
-  overflow: hidden;
-
+  margin: 0 auto;
+  width: 50%;
+  height: 45%;
+  padding-top: 4rem;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
   @media (max-width: 768px) {
     flex-direction: column;
-    min-height: auto;
-  }
-`
-
-const LeftImageWrapper = styled.div<{ $visible: boolean }>`
-  flex: 1;
-  position: relative;
-  opacity: 0;
-  transform: translateX(-50px);
-
-  ${({ $visible }) =>
-    $visible &&
-    css`
-      animation: ${slideInLeft} 0.8s ease-out forwards;
-    `}
-
-  @media (max-width: 768px) {
+    text-align: center;
     width: 90%;
-    height: auto;
   }
-
-  img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 96%;
-    height: 90%;
-    object-fit: cover;
-    border-radius: 8px;
-
-    /* добавляем цветную «тень» справа и ниже */
-    box-shadow: 20px 10px 0 ${({ theme }) => theme.colors.icons};
-    /* 10px 10px 0 — смещение тени вправо и вниз без размытия */
-  }
-`
-
-
-const RightContent = styled.div`
+`;
+const TextContainer = styled.div`
   flex: 1;
-  padding: 30px;
-  display: flex;
-  height: 90%;
-  flex-direction: column;
-
-  @media (max-width: 768px) {
-    padding: 30px 20px;
-  }
-`
-
-const Title = styled.h2<{ $visible: boolean }>`
-  margin: 0;
+`;
+const Title = styled.h2`
   font-size: 2rem;
-  text-align: center;
-  color: ${({ theme }) => theme?.colors?.secondary};
-  font-weight: 700;
-  opacity: 0;
-  transform: translateY(-30px);
+  margin: 0;
+  color: ${({ theme }) => theme.colors.secondary};
   position: relative;
-  z-index: 10;
-
-   & .icon {
+  display: inline-block;
+  opacity: 0;
+  animation: ${slideInDown} 0.8s ease-out 0.1s forwards;
+  & .icon {
     position: absolute;
     top: 60%;
     left: 50%;
-    transform: translate(-50%, -40%); /* под текстом */
-    z-index: -1;                       /* позади заголовка */
-    opacity: 0.5;                      /* прозрачность */
+    transform: translate(-50%, -40%);
+    z-index: -1;
+    opacity: 0.5;
   }
-
-  ${({ $visible }) =>
-    $visible &&
-    css`
-      animation: ${slideInDown} 0.7s ease-out forwards;
-    `}
-
-  @media (max-width: 768px) {
-    font-size: 1.75rem;
-  }
-`
-
-const Description = styled.p<{ $visible: boolean }>`
-  margin: 16px 0 24px 0;
-  font-size: 1.4rem;
-  font-weight: 600;
-  color: ${({ theme }) => theme?.colors?.text ?? '#333'};
-  line-height: 1.3;
+`;
+const Desc = styled.p`
+  margin: 1rem 0 0;
+  font-size: 1.1rem;
+  line-height: 1.4;
   opacity: 0;
-  transform: translateY(-30px);
-
-  ${({ $visible }) =>
-    $visible &&
-    css`
-      animation: ${slideInDown} 0.7s ease-out 0.2s forwards;
-    `}
-
-  @media (max-width: 768px) {
-    font-size: 1rem;
-    margin: 12px 0 16px 0;
+  animation: ${slideInDown} 0.8s ease-out 0.3s forwards;
+`;
+const ButtonAboutUs = styled.button`
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  margin-top: 4%;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  background-color: ${({ theme }) => theme.colors.buttons};
+  &:hover {
+    opacity: 0.9;
   }
-`
-
-const Divider = styled.div<{ $visible: boolean }>`
+`;
+const RightImage = styled.img`
+  flex: 1;
+  max-width: 300px;
   width: 100%;
-  height: 2px;
-  background: ${({ theme }) => theme?.colors?.buttons ?? '#0C253F'};
-  margin-bottom: 24px;
+  border-radius: 8px;
+  box-shadow: 10px 10px #d4a15b;
   opacity: 0;
-  transform: scaleX(0);
+  animation: ${slideInDown} 0.8s ease-out 0.5s forwards;
+`;
 
-  ${({ $visible }) =>
-    $visible &&
-    css`
-      animation: ${fadeInUp} 0.5s ease-out 0.4s forwards;
-    `}
-
-  @media (max-width: 768px) {
-    width: 60px;
-    margin-bottom: 16px;
-  }
-`
-
-const Subtitle = styled.h3<{ $visible: boolean }>`
-  margin: 0 0 16px 0;
+// Bottom part with 6 specialization cards in 2 rows
+const BottomSection = styled.section`
+  
   text-align: center;
-  font-size: 1.5rem;
-  color: ${({ theme }) => theme?.colors?.primary ?? '#0C253F'};
-  font-weight: 600;
+  padding: 1.4rem;
+  height: 55%;
+`;
+const Subtitle = styled.h3`
+  font-size: 1.8rem;
+  margin-bottom: 2rem;
+  color: ${({ theme }) => theme.colors.secondary};
   opacity: 0;
-  transform: translateY(-20px);
+  animation: ${slideInDown} 0.8s ease-out 0.7s forwards;
+`;
 
-  ${({ $visible }) =>
-    $visible &&
-    css`
-      animation: ${slideInDown} 0.7s ease-out 0.6s forwards;
-    `}
+// Grid layout without gap, using borders as separators
+const Grid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 0;
+  max-width: 1000px;
+  margin: 0 auto;
+`;
 
-  @media (max-width: 768px) {
-    font-size: 1.25rem;
-    margin-bottom: 12px;
-  }
-`
-
-const SpecializationsList = styled.ul`
-  list-style: none;
-  margin: 0;
-  padding: 0;
-`
-
-const SpecializationItem = styled.li<{ $visible: boolean; $delay: number }>`
+const Card = styled.div<{ delay?: number }>`
+  box-sizing: border-box;
   display: flex;
-  align-items: flex-start;
-  margin-bottom: 5px;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  padding: 2rem;
   opacity: 0;
-  transform: translateY(20px);
+  animation: ${slideInUp} 0.6s ease-out ${(props) => props.delay || 0}s forwards;
 
-  ${({ $visible, $delay }) =>
-    $visible &&
-    css`
-      animation: ${fadeInUp} 0.6s ease-out ${$delay}s forwards;
-    `}
-
-  @media (max-width: 600px) {
-    margin-bottom: 8px;
+  border-right: 2px solid rgba(226, 23, 23, 0.3);
+  border-bottom: 2px solid rgba(177, 16, 16, 0.3);
+  &:nth-child(3n) {
+    border-right: none;
   }
-
-  .icon {
-    flex: 0 0 24px;
-    margin-right: 12px;
-    color: ${({ theme }) => theme?.colors?.primary ?? '#0C253F'};
-    font-size: 1.25rem;
-    line-height: 1;
-    margin-top: 4px;
-
-    @media (max-width: 600px) {
-      font-size: 1.1rem;
-      margin-right: 8px;
-      margin-top: 2px;
-    }
+  &:nth-child(n + 4) {
+    border-bottom: none;
   }
-
-  .text {
-    flex: 1;
-    font-size: 1.125rem;
-    color: ${({ theme }) => theme?.colors?.text ?? '#333'};
-    line-height: 1.4;
-
-    @media (max-width: 600px) {
-      font-size: 1rem;
-    }
+`;
+const CardImage = styled.img<{ delay?: number }>`
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 0.75rem;
+  opacity: 0;
+  animation: ${slideInDown} 0.8s ease-out
+    ${(props) => (props.delay || 0) + 0.1}s forwards;
+`;
+const CardLabel = styled.span<{ delay?: number }>`
+  font-size: 1rem;
+  color: ${({ theme }) => theme.colors.icons};
+  opacity: 0;
+  animation: ${slideInUp} 0.6s ease-out ${(props) => (props.delay || 0) + 0.2}s
+    forwards;
+  transition: color 0.2s;
+  ${Card}:hover & {
+    color: ${({ theme }) => theme.colors.icons};
   }
-`
-export const AboutUsSection: React.FC = () => {
-  const sectionRef = useRef<HTMLDivElement | null>(null)
-  const [sectionVisible, setSectionVisible] = useState(false)
+`;
 
-  const descriptionText =
-    'Партнёрство «Бакаев и Партнеры» объединяет адвокатов-профессионалов Москвы, Московской области и регионов России со стажем более 10 лет.'
+// Data array with 6 items
+const specializations = [
+  "Судебная защита бизнеса",
+  "Налоговое консультирование",
+  "Защита при проверках органов власти",
+  "Сопровождение юридического отдела",
+  "Личная защита владельцев и топ-менеджмента",
+  "Корпоративные споры",
+];
+const images = [
+  "/law_protect.jpg",
+  "/taxes_consult.jpg",
+  "/protection_government.jpg",
+  "/assistance_law.jpg",
+  "/managers_assist.jpg",
+  "/corporate_disputes.jpg",
+];
 
-  const specializations = [
-    'Судебная защита бизнеса',
-    'Налоговое консультирование',
-    'Защита при проверках органов власти',
-    'Сопровождение юридического отдела',
-    'Личная защита владельцев и топ-менеджмента',
-  ]
+export const AboutUsSection: React.FC = () => (
+  <SectionWrapper>
+    <TopSection>
+      <TextContainer>
+        <Title>
+          О партнерстве
+          <div className="icon">
+            <BrushIcon />
+          </div>
+        </Title>
+        <Desc>
+          Партнёрство «Бакаев и Партнеры» объединяет адвокатов-профессионалов
+          Москвы, Московской области и регионов России со стажем более 10 лет.
+        </Desc>
+        <ButtonAboutUs>Подробнее</ButtonAboutUs>
+      </TextContainer>
+      <RightImage src="/statue.jpeg" alt="О партнерстве" />
+    </TopSection>
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            setSectionVisible(true)
-            observer.unobserve(entry.target)
-          }
-        })
-      },
-      { threshold: 0.3 }
-    )
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current)
-    }
-
-    return () => {
-      observer.disconnect()
-    }
-  }, [])
-
-  return (
-    <SectionContainer ref={sectionRef}>
-      <LeftImageWrapper $visible={sectionVisible}>
-        <img src="/statue.jpeg" alt="О нашем партнёрстве" />
-      </LeftImageWrapper>
-
-      <RightContent>
-        <Title $visible={sectionVisible}>О партнерстве <div className='icon'><BrushIcon /></div></Title>
-        
-        <Description $visible={sectionVisible}>{descriptionText}</Description>
-        <Divider $visible={sectionVisible} />
-        <Subtitle $visible={sectionVisible}>Наши специализации</Subtitle>
-        <SpecializationsList>
-          {specializations.map((item, idx) => (
-            <SpecializationItem
-              key={idx}
-              $visible={sectionVisible}
-              $delay={(idx + 1) * 0.3}
-            >
-              <span className="icon">✓</span>
-              <span className="text">{item}</span>
-            </SpecializationItem>
-          ))}
-        </SpecializationsList>
-      </RightContent>
-    </SectionContainer>
-  )
-}
+    <BottomSection>
+      <Subtitle>Наши специализации</Subtitle>
+      <Grid>
+        {specializations.map((label, idx) => (
+          <Card key={idx} delay={idx * 0.2}>
+            <CardImage src={images[idx]} alt={label} delay={idx * 0.2} />
+            <CardLabel delay={idx * 0.2}>{label}</CardLabel>
+          </Card>
+        ))}
+      </Grid>
+    </BottomSection>
+  </SectionWrapper>
+);

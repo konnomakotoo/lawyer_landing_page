@@ -5,9 +5,11 @@ import { ConsultationForm } from './Consultation'
 import ServiceCardsRow from '../components/ServiceCardsRow'
 import TeamStrip from '../components/TeamStrip'
 import ParallaxContactSection from '../components/ContactSection' 
-import ScrollTextImageE from '../components/ScrollTextImage'
 import TestimonialSlider from '../components/Reviews'
-import WreathIcon from '../Icons/WreathIcon'
+import { AboutUsSection } from '../components/AboutUsWave'
+import CallAndTeamSlider from '../components/CallAndTeamSlider'
+import RecentProjects from '../components/RecentProjects'
+import StaticHero from '../components/ScrollTextImage'
 
 // 1) Основной контейнер, в котором будет происходить прокрутка:
 const HomeContainer = styled.main`
@@ -33,7 +35,7 @@ const HomeContainer = styled.main`
 
 // 2) Секция-«экран», которая всегда будет занимать ровно один экран (без NavBar)
 const SnapSection = styled.section`
-  margin-top: 4rem;
+  
   height: 100vh;  
   scroll-snap-align: start;    
   scroll-snap-stop: always;   
@@ -99,11 +101,10 @@ export default function MainPage() {
 
   return (
     <HomeContainer>
- 
       <SnapSection>
         {/* <Slider /> */}
-        <ScrollTextImageE />
-         <ButtonMainPage onClick={openModal}>
+        <StaticHero />
+        {/* <ButtonMainPage onClick={openModal}>
           Записаться на консультацию
         </ButtonMainPage>
         {isModalOpen && (
@@ -115,25 +116,30 @@ export default function MainPage() {
               <ConsultationForm />
             </ModalContent>
           </ModalOverlay>
-        )}
+        )} */}
       </SnapSection>
 
       <SnapSection>
-        <WreathIcon />
+        <AboutUsSection />
       </SnapSection>
 
       <SnapSection>
-        <ServiceCardsRow />
-        <TeamStrip />
+        {/* <ServiceCardsRow />
+        <TeamStrip /> */}
+        <CallAndTeamSlider />
       </SnapSection>
 
-      <SnapSection>
+      {/* <SnapSection>
         <TestimonialSlider />
+        </SnapSection> */}
+
+      <SnapSection>
+        <RecentProjects />
       </SnapSection>
 
       <SnapSection>
         <ParallaxContactSection />
       </SnapSection>
     </HomeContainer>
-  )
+  );
 }

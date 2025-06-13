@@ -52,10 +52,10 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=web"
-      - 'traefik.http.routers.api.rule=Host(`api.bakaevpartners.ru`) && PathPrefix(`/api`)'
-      - "traefik.http.routers.api.entrypoints=websecure"
-      - "traefik.http.routers.api.tls.certresolver=le"
-      - "traefik.http.services.api.loadbalancer.server.port=3000"
+      - 'traefik.http.routers.server.rule=Host(`bakaevpartners.ru`) && PathPrefix(`/api`)'
+      - "traefik.http.routers.server.entrypoints=websecure"
+      - "traefik.http.routers.server.tls.certresolver=le"
+      - "traefik.http.services.server.loadbalancer.server.port=3000"
             # === CORS middleware definition ===
       - "traefik.http.middlewares.api-cors.headers.accessControlAllowOriginList=https://bakaevpartners.ru"
       - "traefik.http.middlewares.api-cors.headers.accessControlAllowMethods=GET,POST,OPTIONS,PUT,DELETE"
@@ -63,7 +63,7 @@ services:
       - "traefik.http.middlewares.api-cors.headers.accessControlAllowCredentials=true"
       - "traefik.http.middlewares.api-cors.headers.accessControlMaxAge=86400"
       # === Привязка CORS middleware к роутеру ===
-      - "traefik.http.routers.api.middlewares=api-cors@docker"
+      - "traefik.http.routers.server.middlewares=api-cors@docker"
     depends_on:
       - db
     networks:
