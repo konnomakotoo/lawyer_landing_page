@@ -12,6 +12,7 @@ declare module 'styled-components' {
       backgroundAlt?: string;
       textOnBackground: string;
       block: string;
+      blockDark: string;
     };
     space: {
       sm: string;

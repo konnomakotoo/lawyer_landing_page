@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 
 // Генератор случайного номера
 const generatePhone = () => {
@@ -9,213 +9,195 @@ const generatePhone = () => {
   return `+7 (${rand()}) ${rand()}-${part2()}-${part3()}`;
 };
 
-// Данные команды
 interface Lawyer {
   firstName: string;
   lastName: string;
   img: string;
 }
+
 const TEAM: Lawyer[] = [
   { firstName: "Иван", lastName: "Иванов", img: "/law.jpg" },
   { firstName: "Мария", lastName: "Петрова", img: "/law.jpg" },
   { firstName: "Алексей", lastName: "Сидоров", img: "/law.jpg" },
   { firstName: "Ольга", lastName: "Кузнецова", img: "/law.jpg" },
   { firstName: "Дмитрий", lastName: "Смирнов", img: "/law.jpg" },
+  { firstName: "Екатерина", lastName: "Лебедева", img: "/law.jpg" },
 ];
 
-// Анимация появления
-const fadeIn = keyframes`
-  from { opacity: 0; }
-  to   { opacity: 1; }
-`;
-
-// Стили
 const Wrapper = styled.div`
   width: 100%;
-  height: 100%;
-`;
-const TopSection = styled.div`
-  position: relative;
-  height: 40%;
-  background: url("/call.jpg") center/cover no-repeat;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5%;
-  color: ${({ theme }) => theme.colors.textOnPrimary};
   text-align: center;
-  &::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-color: ${({ theme }) => theme.colors.secondary};
-    opacity: 0.8;
-  }
-`;
-const CallText = styled.div`
-  position: relative;
-  z-index: 1;
-  animation: ${fadeIn} 1s ease-out;
+  height: 100vh;
 `;
 
-const TitleCallSmall = styled.h2`
-  margin: 0;
-  font-size: 1rem;
+const UpContainer = styled.div`
+  width: 100%;
+  text-align: center;
+  height: 55vh;
+  margin-top: 7%;
 `;
-const TitleCall = styled.h2`
-  margin: 0;
+
+const SectionTitle = styled.h2`
   font-size: 2.5rem;
-`;
-const Phone = styled.p`
-  color: ${({ theme }) => theme.colors.buttons};
-  margin: 0 auto;
-  padding: 20px 20px;
-  font-size: 1.5rem;
-  border: 0.5px solid white;
-  width: 40%;
+  margin: 2rem 0 1rem;
+  color: ${({ theme }) => theme.colors.secondary};
 `;
 
-//BOTTOM
-const BottomSection = styled.div`
+const SliderContainer = styled.div`
+  position: relative;
   display: flex;
+  justify-content: center;
   align-items: center;
-  justify-content: center;
-  padding: 2rem;
-  height: 50vh;
-  width: 75%;
-  margin: 0 auto;
-`;
-const Controls = styled.div`
-  flex: 0 0 30%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 6rem;
-`;
-const TeamTitle = styled.h3`
-  margin: 0;
-  font-size: 2rem;
-  animation: ${fadeIn} 0.8s ease-out;
+  padding: 2rem 0;
 `;
 
-const TeamText = styled.h3`
-  margin: 0;
-  font-size: 1.3rem;
-  animation: ${fadeIn} 0.8s ease-out;
-`;
-const Arrows = styled.div`
-  display: flex;
-  gap: .5rem;
-`;
-const ArrowButton = styled.button`
-  width: 20%;
+const ArrowButton = styled.button<{ side: "left" | "right" }>`
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
   background: none;
   border: none;
   font-size: 2rem;
   cursor: pointer;
-  border: 0.5px solid black;
-  padding-bottom: 5px;
-  background-color: ${({ theme }) => theme.colors.icons};
+  color: ${({ theme }) => theme.colors.secondary};
+  ${({ side }) =>
+    side === "left" ? "left: calc(50% - 200px);" : "right: calc(50% - 200px);"}
+  z-index: 2;
 `;
-const SliderContainer = styled.div`
-  flex: 1;
-  overflow: hidden;
-`;
-const Slides = styled.div<{ translateX: number }>`
+
+const Slides = styled.div`
   display: flex;
-  transition: transform 0.5s ease;
-  transform: translateX(${(props) => -props.translateX}px);
+  justify-content: center;
+  min-height: 300px;
+  align-items: flex-end;
+  gap: 3rem;
 `;
-const Slide = styled.div`
-  flex: 0 0 200px;
-  margin: 0 10px;
+
+// Слайд с плавным переходом размеров и прозрачности
+const Slide = styled.div<{ isCenter: boolean }>`
+  flex: 0 0 auto;
+  width: ${({ isCenter }) => (isCenter ? "300px" : "200px")};
+  height: ${({ isCenter }) => (isCenter ? "300px" : "200px")};
   position: relative;
-  animation: ${fadeIn} 0.5s ease-out;
+  opacity: ${({ isCenter }) => (isCenter ? 1 : 0.6)};
+  transition: width 0.4s ease, height 0.4s ease, opacity 0.4s ease;
 `;
+
 const SlideImage = styled.img`
-  width: 400px;
-  height: 400px;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 `;
-const NameOverlay = styled.div`
+
+const NameOverlay = styled.div<{ isCenter: boolean }>`
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, ${({ isCenter }) => (isCenter ? 0.6 : 0.8)});
   color: #fff;
   padding: 0.5rem;
   text-align: center;
-  font-size: 1rem;
+  font-size: ${({ isCenter }) => (isCenter ? "1.1rem" : "0.9rem")};
   border-radius: 0 0 8px 8px;
+  transition: background 0.4s ease, font-size 0.4s ease;
+`;
+
+const CallSection = styled.div`
+  background: url("/call.jpg") center/cover no-repeat;
+  color: #fff;
+  padding: 2rem 1rem;
+  position: relative;
+  height: 32.7vh;
+`;
+
+const CallOverlay = styled.div`
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+`;
+
+const CallContent = styled.div`
+  position: relative;
+  z-index: 1;
+  max-width: 600px;
+  margin: 0 auto;
+`;
+
+const CallText = styled.p`
+  font-size: 1.2rem;
+  margin: 0;
+`;
+
+const Phone = styled.h3`
+  font-size: 2rem;
+  margin: 1rem 0 0;
 `;
 
 export const CallAndTeamSlider: React.FC = () => {
   const [phone, setPhone] = useState("");
   const [index, setIndex] = useState(0);
-  const visibleCount = 3;
-  const step = 200 + 20; // slide width (200) + margin (2*10)
-  const maxIndex = TEAM.length;
+  const count = TEAM.length;
 
   useEffect(() => {
     setPhone(generatePhone());
   }, []);
 
-  const prev = () => {
-    setIndex((i) => (i - 1 + maxIndex) % maxIndex);
-  };
-  const next = () => {
-    setIndex((i) => (i + 1) % maxIndex);
-  };
+  const prev = () => setIndex((i) => (i - 1 + count) % count);
+  const next = () => setIndex((i) => (i + 1) % count);
 
-  // Build array of visible slides wrapping around
-  const visibleSlides: Lawyer[] = [];
-  for (let i = 0; i < visibleCount; i++) {
-    visibleSlides.push(TEAM[(index + i) % maxIndex]);
-  }
+  const center = index;
+  const left = (index - 1 + count) % count;
+  const right = (index + 1) % count;
+  const visible = [left, center, right];
 
   return (
     <Wrapper>
-      <TopSection>
-        <CallText>
-          <TitleCallSmall>Хотите обсудить ваш случай в деталях?</TitleCallSmall>
-          <TitleCall>Позвоните Нам - Наши Юристы Помогут Вам</TitleCall>
-          <Phone>{phone}</Phone>
-        </CallText>
-      </TopSection>
+      <UpContainer>
+        <SectionTitle>Наша команда профессионалов</SectionTitle>
 
-      <BottomSection>
-        <Controls>
-          <TeamTitle>Наша команда</TeamTitle>
-          <TeamText>
-            Наши адвокаты — опытные профессионалы с индивидуальным подходом и
-            решимостью защищать ваши права на высшем уровне.
-          </TeamText>
-          <Arrows>
-            <ArrowButton onClick={prev}>&#8249;</ArrowButton>
-            <ArrowButton onClick={next}>&#8250;</ArrowButton>
-          </Arrows>
-        </Controls>
         <SliderContainer>
-          <Slides translateX={step * 0 /* always show from 0 */}>
-            {visibleSlides.map((member, idx) => (
-              <Slide key={idx}>
-                <SlideImage
-                  src={member.img}
-                  alt={`${member.firstName} ${member.lastName}`}
-                />
-                <NameOverlay>
-                  {member.firstName} {member.lastName}
-                </NameOverlay>
-              </Slide>
-            ))}
+          <ArrowButton side="left" onClick={prev}>
+            &#8249;
+          </ArrowButton>
+
+          <Slides>
+            {visible.map((idx, pos) => {
+              const isCenter = pos === 1;
+              const member = TEAM[idx];
+              return (
+                <Slide key={idx} isCenter={isCenter}>
+                  <SlideImage
+                    src={member.img}
+                    alt={`${member.firstName} ${member.lastName}`}
+                  />
+                  <NameOverlay isCenter={isCenter}>
+                    {member.firstName} {member.lastName}
+                  </NameOverlay>
+                </Slide>
+              );
+            })}
           </Slides>
+
+          <ArrowButton side="right" onClick={next}>
+            &#8250;
+          </ArrowButton>
         </SliderContainer>
-      </BottomSection>
+      </UpContainer>
+
+      <CallSection>
+        <CallOverlay />
+        <CallContent>
+          <CallText>
+            Хотите обсудить ваш случай в деталях? Позвоните нам — наши юристы
+            помогут вам.
+          </CallText>
+          <Phone>{phone}</Phone>
+        </CallContent>
+      </CallSection>
     </Wrapper>
   );
 };
 
-export default CallAndTeamSlider
+export default CallAndTeamSlider;
