@@ -24,13 +24,6 @@ const ParallaxSection = styled.section`
   width: 100%;
   height: 70vh;
   background: url("/contact_us.jpg") center/cover fixed;
-
-  @media (max-width: 1024px) {
-    height: 60vh;
-  }
-  @media (max-width: 768px) {
-    height: 50vh;
-  }
 `;
 
 const ParallaxOverlay = styled.div`
@@ -57,14 +50,24 @@ const LeftContent = styled.div`
     line-height: 1.4;
   }
 
-  @media (max-width: 768px) {
-    top: 10%;
+  @media (max-width: 1080px) {
     h2 {
       font-size: 2rem;
     }
     p {
       font-size: 0.95rem;
     }
+  }
+  @media (max-width: 1050px) {
+    h2 {
+      font-size: 1.7rem;
+    }
+    p {
+      font-size: 0.8rem;
+    }
+  }
+  @media (max-width: 940px) {
+    display: none;
   }
 `;
 
@@ -85,7 +88,7 @@ const FormContainer = styled.form`
 
   h3 {
     margin: 0 0 1rem;
-    font-size: 1.75rem;
+    font-size: 1.6rem;
     text-align: center;
     color: #0c253f;
   }
@@ -94,7 +97,7 @@ const FormContainer = styled.form`
   textarea {
     width: 100%;
     padding: 0.75rem 1rem;
-    font-size: 1rem;
+    font-size: 0.9rem;
     border: 1px solid #ccc;
     border-radius: 6px;
     transition: border-color 0.2s, box-shadow 0.2s;
@@ -125,13 +128,31 @@ const FormContainer = styled.form`
     }
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 940px) {
     top: auto;
-    bottom: 10%;
+    bottom: 5%;
     right: 50%;
     transform: translateX(50%);
-    width: 90%;
+    width: 80%;
     padding: 1rem;
+
+    h3 {
+      margin: 0 0 0.5rem;
+      font-size: 1.5rem;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 0.5rem 0.9rem;
+      font-size: 0.8rem;
+    }
+
+    button {
+      margin-top: 0.2rem;
+      padding: 0.6rem;
+      font-size: 0.9rem;
+    }
   }
 `;
 
