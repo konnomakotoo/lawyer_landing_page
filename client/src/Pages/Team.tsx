@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import type { AppDispatch, RootState } from '../redux/store/redux.store'
 import { fetchTeam } from '../redux/slices/teamSlice'
 import { useNavigate } from 'react-router-dom'
+const API = import.meta.env.VITE_API_URL;
 
 const Wrapper = styled.div`
   padding: ${({ theme }) => theme.space.lg};
@@ -139,32 +140,39 @@ export default function Team() {
           type="text"
           placeholder="Поиск по имени или фамилии..."
           value={search}
-          onChange={e => setSearch(e.target.value)}
+          onChange={(e) => setSearch(e.target.value)}
         />
         <FilterSelect
           value={filterArea}
-          onChange={e => setFilterArea(e.target.value)}
+          onChange={(e) => setFilterArea(e.target.value)}
         >
-          {areaOptions.map(area => (
+          {areaOptions.map((area) => (
             <option key={area} value={area}>
-              {area || 'Все области'}
+              {area || "Все области"}
             </option>
           ))}
         </FilterSelect>
       </Controls>
 
       <Grid>
-        {filtered.map(lawyer => (
+        {filtered.map((lawyer) => (
           <Card key={lawyer.id} onClick={() => navigate(`/team/${lawyer?.id}`)}>
-            <Photo src={lawyer.image} alt={`${lawyer.name} ${lawyer.lastName}`} />
+            <Photo
+              src={`${API}/${lawyer.image}`}
+              alt={`${lawyer.name} ${lawyer.lastName}`}
+            />
             <Info>
-              <Name>{lawyer.name} {lawyer.lastName}</Name>
+              <Name>
+                {lawyer.name} {lawyer.lastName}
+              </Name>
               <Field>{lawyer?.position}</Field>
-              <Field><strong>Область:</strong> {lawyer.area}</Field>
+              <Field>
+                <strong>Область:</strong> {lawyer.area}
+              </Field>
             </Info>
           </Card>
         ))}
       </Grid>
     </Wrapper>
-  )
+  );
 }

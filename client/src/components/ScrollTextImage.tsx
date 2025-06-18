@@ -73,13 +73,13 @@ const HeroContent = styled.div`
   z-index: 2;
 
   h2 {
-    font-size: 2.3rem;
+    font-size: 2.15rem;
     margin-bottom: 1rem;
   }
 
   .subtitle {
     margin-bottom: 1.5rem;
-    font-size: 1.125rem;
+    font-size: 1.12rem;
   }
 
   form {
@@ -87,7 +87,7 @@ const HeroContent = styled.div`
     justify-content: center;
     align-items: center;
     gap: 16px;
-    width: 93%;
+    width: 90%;
     margin: 0 auto;
 
     button {
@@ -99,6 +99,10 @@ const HeroContent = styled.div`
       cursor: pointer;
       font-size: 1rem;
     }
+  }
+
+  @media (max-width: 1150px) {
+    width: 90%;
   }
 
   @media (max-width: 1024px) {
@@ -115,7 +119,7 @@ const HeroContent = styled.div`
   }
 
   @media (max-width: 768px) {
-    top: 33%;
+    top: 28%;
     width: 90%;
     h2 {
       font-size: 1.75rem;
@@ -129,8 +133,8 @@ const HeroContent = styled.div`
     }
   }
 
-  @media (max-width: 580px) {
-    top: 30%;
+  @media (max-width: 590px) {
+    top: 27%;
     h2 {
       font-size: 1.5rem;
     }
@@ -139,10 +143,30 @@ const HeroContent = styled.div`
     }
   }
 
-  @media (max-width: 501px) {
-    top: 33%;
+  @media (max-width: 514px) {
+    top: 27%;
     h2 {
       font-size: 1.2rem;
+    }
+    .subtitle {
+      font-size: 0.85rem;
+    }
+  }
+
+  @media (max-width: 405px) {
+    top: 30%;
+    h2 {
+      font-size: 1.2rem;
+    }
+    .subtitle {
+      font-size: 0.85rem;
+    }
+  }
+
+  @media (max-width: 375px) {
+    top: 43%;
+    h2 {
+      font-size: 1.3rem;
     }
     .subtitle {
       font-size: 0.85rem;
@@ -156,7 +180,7 @@ export const InputWrapperMainPage = styled.div`
 `;
 
 export const StyledInputMainPage = styled.input`
-  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  padding: 0.65rem 1rem 0.65rem 2.5rem;
   font-size: 1rem;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -164,14 +188,11 @@ export const StyledInputMainPage = styled.input`
   &:focus {
     outline: none;
     border-color: ${({ theme }) => theme.colors.primary};
-    box-shadow: 0 0 0 2px ${({ theme }) => theme.colors.primary}33;
+    box-shadow: 0 0 0 2px ${({ theme }) => theme.colors.primary};
   }
 
   @media (max-width: 768px) {
-    padding: 0.75rem 1rem 0.75rem 2.5rem;
     font-size: .8rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
     width: 90%;
   }
 `;
@@ -202,11 +223,9 @@ const MetricsContainer = styled.div`
   z-index: 5;
   background-color: ${({ theme }) => theme.colors.backgroundAlt};
   padding: 10rem;
-  /* фиксированная высота для сохранения размера */
   width: 100%;
   height: 53vh;
   display: flex;
-  justify-content: flex-end;
   align-items: center;
   border-radius: 20% 20% 0 0;
   box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
@@ -216,55 +235,117 @@ const MetricsContainer = styled.div`
   }
 
   @media (max-width: 768px) {
-    bottom: 21%;
+    bottom: 22.5%;
   }
 
   @media (max-width: 740px) {
-    bottom: 20%;
+    bottom: 22.2%;
   }
 
-  @media (max-width: 740px) {
-    bottom: 18%;
+  @media (max-width: 590px) {
+    bottom: 23%;
+  }
+
+  @media (max-width: 514px) {
+    bottom: 25%;
+  }
+
+  @media (max-width: 505px) {
+    bottom: 24%;
   }
 
   @media (max-width: 414px) {
+    bottom: 24%;
+  }
+
+  @media (max-width: 405px) {
+    bottom: 21%;
+  }
+
+  @media (max-width: 403px) {
     bottom: 20%;
   }
 
-  @media (max-width: 400px) {
-    bottom: 13%;
+  @media (max-width: 375px) {
+    display: none;
   }
 `;
 
 
 
 const ResponsiveIconWrapper = styled.div`
-  width: 100px;
-  height: 100px;
+  width: 150px;
+  height: 150px;
 
   & > svg {
     width: 100%;
     height: 100%;
+  }
+  @media (max-width: 1100px) {
+    width: 90px;
+    height: 90px;
+  }
+
+  @media (max-width: 962px) {
+    width: 80px;
+    height: 80px;
+  }
+
+  @media (max-width: 750px) {
+    width: 100px;
+    height: 100px;
+  }
+  @media (max-width: 690px) {
+    width: 80px;
+    height: 80px;
+  }
+  @media (max-width: 565px) {
+    width: 0;
+    height: 0;
+    display: none;
   }
 `;
 
 // Flex-контейнер для сетки метрик
 const MetricsGrid = styled.div`
   display: flex;
-  gap: 2rem;
-  width: 90%;
-  margin: 0 auto;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  width: 100%;
 
+  /* по 4 в ряд на больших */
+  & > div {
+    flex: 0 0 calc(25% - 1rem);
+    max-width: calc(25% - 1rem);
+  }
+
+  /* две в ряд на планшете */
   @media (max-width: 1100px) {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-    width: 100%;
+    & > div {
+      flex: 0 0 calc(50% - 1rem);
+      max-width: calc(50% - 1rem);
+    }
+  }
+
+  @media (max-width: 565px) {
+    margin-top: -18%;
+    & > div {
+      flex: 0 0 100%;
+      max-width: 100%;
+    }
+  }
+  @media (max-width: 406px) {
+    margin-top: -50%;
+  }
+  @media (max-width: 375px) {
+    display: none;
   }
 `;
 
 // Одиночная метрика
 const Metric = styled.div`
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -276,26 +357,26 @@ const Metric = styled.div`
     margin-bottom: 0.5rem;
 
     svg {
-      width: 100px;
-      height: 100px;
+      width: 150px;
+      height: 150px;
     }
   }
 
   .number {
-    font-size: 2rem;
+    font-size: 2.6rem;
     font-weight: bold;
     margin: 0.1rem 0;
     color: ${({ theme }) => theme.colors.buttons};
   }
 
   h2 {
-    font-size: 0.9rem;
+    font-size: 1.1rem;
     margin: 0.1rem 0;
     color: ${({ theme }) => theme.colors.buttons};
   }
 
   .desc {
-    font-size: 0.7rem;
+    font-size: 0.9rem;
     color: ${({ theme }) => theme.colors.blockDark};
     margin-top: 0.2rem;
   }
@@ -303,37 +384,78 @@ const Metric = styled.div`
   @media (max-width: 1100px) {
     max-width: none;
     width: 100%;
-    height: 170px;
+    height: 180px;
+
+    div {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
 
     .icon {
       svg {
-        width: 50px;
-        height: 50px;
+        width: 90px;
+        height: 90px;
       }
+    }
+    .number {
+      font-size: 2.8rem;
+    }
+
+    h2 {
+      margin-left: 30%;
+      margin-top: -3%;
+    }
+  }
+
+  @media (max-width: 962px) {
+    .icon {
+      svg {
+        width: 80px;
+        height: 80px;
+      }
+    }
+    .number {
+      font-size: 2.8rem;
+    }
+
+    h2 {
+      margin-left: 30%;
+      margin-top: -7%;
     }
   }
 
   @media (max-width: 833px) {
     .icon {
-      margin-bottom: 0.6rem;
+      margin-bottom: 0rem;
 
       svg {
-        width: 50px;
-        height: 50px;
+        width: 70px;
+        height: 70px;
       }
     }
 
+    .number {
+      font-size: 2.3rem;
+    }
+
+    h2 {
+      font-size: 1.1rem;
+      margin-left: 30%;
+      margin-top: -7%;
+    }
+
     .desc {
-      font-size: 0.5rem;
+      font-size: 0.7rem;
       margin-top: 0.1rem;
     }
   }
 
   @media (max-width: 750px) {
-    align-items: center;
-    text-align: center;
-    flex: 1 1 200px;
-    max-width: 300px;
+    div {
+      flex-direction: column;
+      gap: 0;
+    }
 
     .icon {
       margin-bottom: 0.1rem;
@@ -345,11 +467,11 @@ const Metric = styled.div`
     }
 
     .number {
-      font-size: 2rem;
+      font-size: 2.7rem;
     }
 
     h2 {
-      font-size: 0.6rem;
+      font-size: 1.05rem;
       margin: 0.1rem 0;
       color: ${({ theme }) => theme.colors.buttons};
     }
@@ -359,30 +481,69 @@ const Metric = styled.div`
     }
   }
 
-  media (max-width: 650px) {
-    padding: 0;
-
+  media (max-width: 690px) {
     .icon {
-      margin-bottom: 0.1rem;
-
       svg {
-        width: 100px;
-        height: 100px;
+        width: 80px;
+        height: 80px;
       }
     }
 
     .number {
-      font-size: 2rem;
+      font-size: 2.5rem;
     }
 
     h2 {
-      font-size: 0.6rem;
+      font-size: 0.9rem;
       margin: 0.1rem 0;
       color: ${({ theme }) => theme.colors.buttons};
     }
+  }
 
-    .desc {
+  @media (max-width: 620px) {
+    max-width: 120px;
+    .number {
+      font-size: 2.1rem;
+    }
+    h2 {
+      font-size: 0.9rem;
+    }
+  }
+
+  @media (max-width: 565px) {
+    width: 100%;
+    height: 80px;
+    div {
+      flex-direction: row;
+      gap: 0;
+    }
+    .number {
+      font-size: 2.6rem;
+    }
+    h2 {
+      font-size: 1.1rem;
+    }
+    .icon {
       display: none;
+
+      svg {
+        display: none;
+      }
+    }
+  }
+
+  @media (max-width: 405px) {
+    width: 100%;
+    height: 80px;
+    div {
+      flex-direction: row;
+      gap: 0;
+    }
+    .number {
+      font-size: 2.5rem;
+    }
+    h2 {
+      font-size: 1rem;
     }
   }
 `;
@@ -447,6 +608,7 @@ export default function StaticHero() {
             const IconComponent = metric.icon;
             return (
               <Metric key={idx}>
+                <div>
                 <ResponsiveIconWrapper className="icon">
                   <IconComponent />
                 </ResponsiveIconWrapper>
@@ -456,6 +618,7 @@ export default function StaticHero() {
                     refs.current[idx] = el;
                   }}
                 />
+                </div>
                 <h2>{metric.title}</h2>
                 <p className="desc">{metric.description}</p>
               </Metric>

@@ -2,6 +2,7 @@ const express = require("express");
 const indexRouter = require("./routes/indexRouter");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const path = require("path");
 
 const app = express();
 
@@ -21,5 +22,6 @@ app.use(cookieParser("fdfdb"));
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api", indexRouter);
+app.use(express.static(path.join(__dirname, "..", "public")));
 
 module.exports = app;

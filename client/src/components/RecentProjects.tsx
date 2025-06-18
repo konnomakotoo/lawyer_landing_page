@@ -1,5 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled, { keyframes } from "styled-components";
+import type { AppDispatch, RootState } from "../redux/store/redux.store";
+import { fetchCategories, type Project } from "../redux/slices/categoriesSlice";
 
 // Fade-in animation
 const fadeIn = keyframes`
@@ -9,192 +12,190 @@ const fadeIn = keyframes`
 
 const SectionWrapper = styled.section`
   width: 100%;
-  background: url("/projects-bg.jpg") center/cover no-repeat;
-  display: flex;
-  flex-direction: column;
-  padding: 2rem;
+  padding: ${({ theme }) => theme.space.lg};
   box-sizing: border-box;
 `;
 
 const Title = styled.h2`
   font-size: 2.5rem;
-  color: ${({ theme }) => theme.colors.textOnPrimary || "#fff"};
-  margin-bottom: 1.5rem;
+  text-align: center;
+  color: ${({ theme }) => theme.colors.secondary};
+  margin-bottom: ${({ theme }) => theme.space.lg};
   opacity: 0;
   animation: ${fadeIn} 0.8s ease-out forwards;
-
-  @media (max-width: 480px) {
-    font-size: 1.75rem;
+  @media (max-width: 780px) {
+    font-size: 2rem;
   }
-  @media (max-width: 375px) {
+  @media (max-width: 600px) {
+    font-size: 2rem;
+  }
+  @media (max-width: 432px) {
     font-size: 1.5rem;
   }
 `;
 
 const ProjectsGrid = styled.div`
-  width: 100%;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
   gap: 1.5rem;
+  grid-template-columns: repeat(4, 1fr);
 
-  @media (max-width: 1200px) {
-    grid-template-columns: repeat(3, 1fr);
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
   }
-  @media (max-width: 992px) {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.8rem;
-  }
-  @media (max-width: 768px) {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.5rem;
-  }
-  @media (max-width: 480px) {
+  @media (max-width: 600px) {
     grid-template-columns: 1fr;
-    gap: 0.5rem;
-  }
-  @media (max-width: 375px) {
-    gap: 0.3rem;
+    gap: 0.8rem;
   }
 `;
 
-interface ProjectCardProps {
-  img: string;
-  delay: number;
-}
-
-const ProjectCard = styled.div<ProjectCardProps>`
-  position: relative;
-  height: 300px;
-  background: url(${(props) => props.img}) center/cover no-repeat;
-  border-radius: 8px;
-  overflow: hidden;
+const CardWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  padding: 1rem;
-  color: #fff;
+  height: 550px;
+
+  @media (max-width: 1024px) {
+    height: 300px;
+  }
+  @media (max-width: 600px) {
+    height: 150px;
+  }
+  border-radius: 8px;
+  overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  opacity: 0;
   animation: ${fadeIn} 0.6s ease-out forwards;
-  animation-delay: ${(props) => props.delay}s;
+`;
+
+const MediaContainer = styled.div<{ image?: string }>`
+  position: relative;
+  flex: 1;
+  background: ${({ image }) =>
+    image ? `url(${image}) center/cover no-repeat` : "transparent"};
 
   &::before {
     content: "";
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.4);
-  }
-
-  @media (max-width: 992px) {
-    height: 250px;
-    padding: 0.8rem;
-  }
-  @media (max-width: 768px) {
-    height: 200px;
-    padding: 0.6rem;
-  }
-  @media (max-width: 480px) {
-    height: 180px;
-    padding: 0.5rem;
-  }
-  @media (max-width: 375px) {
-    height: 150px;
-    padding: 0.4rem;
+    background: ${({ image }) => (image ? "rgba(0,0,0,0.4)" : "none")};
   }
 `;
 
-const Content = styled.div`
-  position: relative;
-  z-index: 1;
+const VideoWrapper = styled.div`
+  position: absolute;
+  inset: 0;
+`;
+
+const VideoIframe = styled.iframe`
+  width: 100%;
+  height: 100%;
+  border: none;
+`;
+
+const InfoBlock = styled.div`
+  background: ${({ theme }) => theme.colors.block};
+  /* фиксированная высота секции под название+кнопку */
+  height: 150px;
+  padding: ${({ theme }) => theme.space.md};
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* заголовок сверху, кнопка снизу */
+  align-items: center;
+  text-align: center;
+
+  @media (max-width: 1024px) {
+    height: 120px;
+  }
+  @media (max-width: 600px) {
+    height: 100px;
+    padding: ${({ theme }) => theme.space.sm};
+  }
 `;
 
 const ProjectTitle = styled.h3`
-  margin: 0 0 0.5rem;
+  margin: 0;
   font-size: 1.25rem;
+  color: ${({ theme }) => theme.colors.secondary};
 
-  @media (max-width: 768px) {
+  @media (max-width: 600px) {
     font-size: 1.1rem;
-  }
-  @media (max-width: 480px) {
-    font-size: 1rem;
-  }
-  @media (max-width: 375px) {
-    font-size: 0.9rem;
-  }
-`;
-
-const ProjectDesc = styled.p`
-  margin: 0 0 1rem;
-  font-size: 0.95rem;
-  line-height: 1.3;
-
-  @media (max-width: 768px) {
-    display: none;
   }
 `;
 
 const MoreButton = styled.button`
   padding: 0.5rem 1rem;
   font-size: 0.9rem;
-  color: ${({ theme }) => theme.colors.textOnPrimary || "#fff"};
-  background-color: ${({ theme }) => theme.colors.buttons || "#007acc"};
+  color: ${({ theme }) => theme.colors.textOnPrimary};
+  background-color: ${({ theme }) => theme.colors.buttons};
   border: none;
   border-radius: 4px;
   cursor: pointer;
 
   &:hover {
-    background-color: ${({ theme }) => theme.colors.secondary || "#005fa3"};
+    background-color: ${({ theme }) => theme.colors.secondary};
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 600px) {
     font-size: 0.8rem;
-    padding: 0.3rem 0.7rem;
-  }
-  @media (max-width: 375px) {
-    font-size: 0.75rem;
-    padding: 0.2rem 0.6rem;
   }
 `;
 
-const projects = [
-  {
-    title: "Проект А",
-    img: "/project1.jpg",
-    desc: "Краткое описание проекта А: его цели, результаты и ключевые достижения.",
-  },
-  {
-    title: "Проект Б",
-    img: "/project2.jpg",
-    desc: "Краткое описание проекта Б: задачи, которые решались, и эффект от внедрения.",
-  },
-  {
-    title: "Проект В",
-    img: "/project3.jpg",
-    desc: "Краткое описание проекта В: специфика, отраслевой контекст, выгоды клиента.",
-  },
-  {
-    title: "Проект Г",
-    img: "/project4.jpg",
-    desc: "Краткое описание проекта Г: вызовы, решения и итоговые показатели эффективности.",
-  },
-];
+const Loading = styled.div`
+  padding: ${({ theme }) => theme.space.lg};
+  text-align: center;
+`;
+const Error = styled.div`
+  padding: ${({ theme }) => theme.space.lg};
+  color: red;
+  text-align: center;
+`;
 
-const RecentProjects: React.FC = () => (
-  <SectionWrapper>
-    <Title>Наши проекты.</Title>
-    <ProjectsGrid>
-      {projects.map((p, i) => (
-        <ProjectCard key={i} img={p.img} delay={0.3 + i * 0.2}>
-          <Content>
-            <ProjectTitle>{p.title}</ProjectTitle>
-            <ProjectDesc>{p.desc}</ProjectDesc>
-            <MoreButton>Подробнее</MoreButton>
-          </Content>
-        </ProjectCard>
-      ))}
-    </ProjectsGrid>
-  </SectionWrapper>
-);
+export default function RecentProjects() {
+  const dispatch = useDispatch<AppDispatch>();
+  const { categories, isLoading, error } = useSelector(
+    (s: RootState) => s.categories
+  );
 
-export default RecentProjects;
+  useEffect(() => {
+    dispatch(fetchCategories());
+  }, [dispatch]);
+
+  if (isLoading) return <Loading>Загрузка...</Loading>;
+  if (error) return <Error>Ошибка: {error}</Error>;
+
+  const all: Project[] = categories.flatMap((cat) => cat.categories);
+  const last4 = all.slice(-4);
+
+  return (
+    <SectionWrapper>
+      <Title>Наши проекты</Title>
+      <ProjectsGrid>
+        {last4.map((p, i) => {
+          const hasVideo = Boolean(p.urlVideo);
+          return (
+            <CardWrapper
+              key={p.id}
+              style={{ animationDelay: `${0.3 + i * 0.2}s` }}
+            >
+              <MediaContainer image={hasVideo ? undefined : p.urlImage!}>
+                {hasVideo && (
+                  <VideoWrapper>
+                    <VideoIframe
+                      src={p.urlVideo!}
+                      title={p.title}
+                      allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  </VideoWrapper>
+                )}
+              </MediaContainer>
+              <InfoBlock>
+                <ProjectTitle>{p.title}</ProjectTitle>
+                <MoreButton>Подробнее</MoreButton>
+              </InfoBlock>
+            </CardWrapper>
+          );
+        })}
+      </ProjectsGrid>
+    </SectionWrapper>
+  );
+}

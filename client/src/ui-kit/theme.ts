@@ -10,7 +10,7 @@ export const theme: DefaultTheme = {
     textOnPrimary: "#FFFFFF",
     backgroundAlt: "#F6FAFC",
     textOnBackground: "#0C253F",
-    block: "#F4F4F4",
+    block: "#FBFBFB",
     blockDark: "#B0B0B0",
   },
   space: {
