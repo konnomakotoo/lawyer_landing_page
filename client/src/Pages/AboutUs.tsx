@@ -288,7 +288,7 @@ export default function AboutUsWave() {
             <TextBlock ref={textRef} visible={textVisible}>
               Наша коллегия объединяет лучших специалистов и предоставляет
               полный спектр юридических услуг по всей стране.
-              <TextBlockSmall ref={textRef} visible={textVisible} l>
+              <TextBlockSmall ref={textRef} visible={textVisible}>
                 Мы обеспечиваем индивидуальный подход к каждому клиенту,
                 оперативно реагируем на все запросы и гарантируем высочайший
                 уровень профессионализма. Наша команда сочетает опыт,
