@@ -52,8 +52,8 @@ const ServiceCardsGrid: React.FC = () => {
   return (
     <Section>
       <Grid>
-        {services.map((svc) => (
-          <Card key={svc.id}>
+        {services.map((svc, idx) => (
+          <Card key={idx}>
             <Image src={svc.image} alt={svc.title} />
             <Title>{svc.title}</Title>
           </Card>
