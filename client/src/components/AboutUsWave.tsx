@@ -1,201 +1,281 @@
-import React from "react";
-import styled, { keyframes } from "styled-components";
-import BrushIcon from "../Icons/BrushIcon";
+import React, { useRef, useState, useEffect } from "react";
+import styled from "styled-components";
+import LawProtectIcon from "../Icons/LawProtectIcon";
+import TaxesConsultIcon from "../Icons/TaxesConsultIcon";
+import ProtectionGovernmentIcon from "../Icons/ProtectionGovernmentIcon";
+import AssistanceLawIcon from "../Icons/AssistanceLawIcon";
+import ManagersAssistIcon from "../Icons/ManagersAssistIcon";
+import CorporateDisputesIcon from "../Icons/CorporateDisputesIcon";
 
-// Slide-in animations
-const slideInDown = keyframes`
-  from { opacity: 0; transform: translateY(-30px); }
-  to   { opacity: 1; transform: translateY(0);     }
-`;
-const slideInUp = keyframes`
-  from { opacity: 0; transform: translateY(30px); }
-  to   { opacity: 1; transform: translateY(0);    }
-`;
+// Hook: IntersectionObserver — анимация при появлении
+function useInView<T extends Element>(ref: React.RefObject<T>): boolean {
+  const [inView, setInView] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setInView(true);
+          obs.disconnect();
+        }
+      },
+      { threshold: 0.1 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [ref]);
+  return inView;
+}
 
-// Wrapper for entire section
-const SectionWrapper = styled.div`
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-`;
-
-// Top part
-const TopSection = styled.section`
-  display: flex;
-  margin: 0 auto;
-  width: 50%;
-  height: 45%;
-  padding-top: 4rem;
-  align-items: center;
-  justify-content: center;
-  gap: 40px;
+// Стили
+const BackgroundSection = styled.div`
+  padding: 2rem;
+  @media (max-width: 900px) {
+    margin-top: 10%;
+  }
   @media (max-width: 768px) {
-    flex-direction: column;
-    text-align: center;
-    width: 90%;
+    margin-top: 0;
   }
-`;
-const TextContainer = styled.div`
-  flex: 1;
-`;
-const Title = styled.h2`
-  font-size: 2rem;
-  margin: 0;
-  color: ${({ theme }) => theme.colors.secondary};
-  position: relative;
-  display: inline-block;
-  opacity: 0;
-  animation: ${slideInDown} 0.8s ease-out 0.1s forwards;
-  & .icon {
-    position: absolute;
-    top: 60%;
-    left: 50%;
-    transform: translate(-50%, -40%);
-    z-index: -1;
-    opacity: 0.5;
-  }
-`;
-const Desc = styled.p`
-  margin: 1rem 0 0;
-  font-size: 1.1rem;
-  line-height: 1.4;
-  opacity: 0;
-  animation: ${slideInDown} 0.8s ease-out 0.3s forwards;
-`;
-const ButtonAboutUs = styled.button`
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  margin-top: 4%;
-  border: none;
-  cursor: pointer;
-  transition: opacity 0.2s;
-  background-color: ${({ theme }) => theme.colors.buttons};
-  &:hover {
-    opacity: 0.9;
-  }
-`;
-const RightImage = styled.img`
-  flex: 1;
-  max-width: 300px;
-  width: 100%;
-  border-radius: 8px;
-  box-shadow: 10px 10px #d4a15b;
-  opacity: 0;
-  animation: ${slideInDown} 0.8s ease-out 0.5s forwards;
 `;
 
-// Bottom part with 6 specialization cards in 2 rows
-const BottomSection = styled.section`
-  
+const SectionWrapper = styled.div`
   text-align: center;
-  padding: 1.4rem;
-  height: 55%;
-`;
-const Subtitle = styled.h3`
-  font-size: 1.8rem;
   margin-bottom: 2rem;
-  color: ${({ theme }) => theme.colors.secondary};
-  opacity: 0;
-  animation: ${slideInDown} 0.8s ease-out 0.7s forwards;
+  @media (max-width: 900px) {
+    margin-bottom: 1rem;
+  }
+  @media (max-width: 768px) {
+    margin-bottom: 1.5rem;
+  }
 `;
 
-// Grid layout without gap, using borders as separators
+const SmallTitle = styled.div`
+  font-size: 1rem;
+  color: ${({ theme }) => theme.colors.primary};
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  @media (max-width: 900px) {
+    font-size: 0.9rem;
+    margin-bottom: 0.2rem;
+  }
+`;
+
+const BigTitle = styled.h2`
+  font-size: 2.5rem;
+  color: ${({ theme }) => theme.colors.secondary};
+  margin: 0 0 0.6rem;
+  text-transform: uppercase;
+
+  @media (max-width: 900px) {
+    font-size: 2rem;
+  }
+  @media (max-width: 480px) {
+    font-size: 1.75rem;
+  }
+`;
+
+const Divider = styled.hr`
+  width: 4rem;
+  height: 3px;
+  background-color: ${({ theme }) => theme.colors.secondary};
+  border: none;
+  margin: 0 auto 2rem;
+
+  @media (max-width: 900px) {
+    margin-bottom: 0.6rem;
+  }
+`;
+
 const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-gap: 0;
-  max-width: 1000px;
+  gap: 2rem;
+  max-width: 1200px;
   margin: 0 auto;
+
+  @media (max-width: 900px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    padding: 0 0.5rem;
+  }
 `;
 
-const Card = styled.div<{ delay?: number }>`
-  box-sizing: border-box;
+const CardBase = styled.div<{ inView: boolean }>`
   display: flex;
   flex-direction: column;
-  align-items: center;
-  position: relative;
-  padding: 2rem;
-  opacity: 0;
-  animation: ${slideInUp} 0.6s ease-out ${(props) => props.delay || 0}s forwards;
+  justify-content: space-between;
 
-  border-right: 2px solid rgba(226, 23, 23, 0.3);
-  border-bottom: 2px solid rgba(177, 16, 16, 0.3);
-  &:nth-child(3n) {
-    border-right: none;
-  }
-  &:nth-child(n + 4) {
-    border-bottom: none;
-  }
+  background-color: ${({ theme }) => theme.colors.block};
+  border-radius: 8px;
+  padding: 0.75rem;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+
+  opacity: ${({ inView }) => (inView ? 1 : 0)};
+  transform: translateY(${({ inView }) => (inView ? "0" : "20px")});
+  transition: opacity 0.5s ease, transform 0.5s ease;
+
+  
 `;
-const CardImage = styled.img<{ delay?: number }>`
+
+const CardIconWrapper = styled.div`
   width: 80px;
   height: 80px;
-  object-fit: cover;
+  margin: 0 auto 0.75rem;
+  border: 0.5px solid ${({ theme }) => theme.colors.block};
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   border-radius: 50%;
-  margin-bottom: 0.75rem;
-  opacity: 0;
-  animation: ${slideInDown} 0.8s ease-out
-    ${(props) => (props.delay || 0) + 0.1}s forwards;
-`;
-const CardLabel = styled.span<{ delay?: number }>`
-  font-size: 1rem;
-  color: ${({ theme }) => theme.colors.icons};
-  opacity: 0;
-  animation: ${slideInUp} 0.6s ease-out ${(props) => (props.delay || 0) + 0.2}s
-    forwards;
-  transition: color 0.2s;
-  ${Card}:hover & {
-    color: ${({ theme }) => theme.colors.icons};
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  & > svg {
+    width: 50%;
+    height: 50%;
+  }
+
+  @media (max-width: 1000px) {
+    width: 60px;
+    height: 60px;
+  }
+
+  @media (max-width: 900px) {
+    width: 50px;
+    height: 50px;
+    margin: 0 auto 0.3rem;
+  }
+  @media (max-width: 375px) {
+    display: none;
   }
 `;
 
-// Data array with 6 items
-const specializations = [
-  "Судебная защита бизнеса",
-  "Налоговое консультирование",
-  "Защита при проверках органов власти",
-  "Сопровождение юридического отдела",
-  "Личная защита владельцев и топ-менеджмента",
-  "Корпоративные споры",
+const CardLabel = styled.h3`
+  font-size: 1.3rem;
+  color: ${({ theme }) => theme.colors.primary};
+  margin: 0.1rem 0;
+  font-weight: bold;
+
+  @media (max-width: 1000px) {
+    font-size: 1.2rem;
+  }
+  @media (max-width: 580px) {
+    font-size: 1rem;
+  }
+`;
+
+const CardDesc = styled.p`
+  font-size: 0.9rem;
+  color: ${({ theme }) => theme.colors.blockDark};
+  margin-bottom: 1rem;
+  line-height: 1.4;
+
+  @media (max-width: 900px) {
+    font-size: 0.8rem;
+  }
+
+  @media (max-width: 653px) {
+    display: none;
+  }
+`;
+
+const MoreButton = styled.button`
+  margin-top: auto;
+  align-self: center;
+
+  width: auto;
+  min-width: 120px;
+  max-width: 160px;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 4px;
+  background-color: ${({ theme }) => theme.colors.buttons};
+  color: ${({ theme }) => theme.colors.textOnPrimary};
+  cursor: pointer;
+  font-size: 1rem;
+
+  @media (max-width: 1000px) {
+    padding: 9px 16px;
+    font-size: 0.9rem;
+  }
+  @media (max-width: 580px) {
+    padding: 7px 13px;
+    font-size: 0.8rem;
+  }
+`;
+
+interface Service {
+  title: string;
+  desc: string;
+  Icon: React.FC<React.SVGProps<SVGSVGElement>>;
+}
+
+const services: Service[] = [
+  {
+    title: "Судебная защита бизнеса",
+    desc: "Сопровождение споров в арбитражных и гражданских судах.",
+    Icon: LawProtectIcon,
+  },
+  {
+    title: "Налоговое консультирование",
+    desc: "Оптимизация налогов и представительство при проверках.",
+    Icon: TaxesConsultIcon,
+  },
+  {
+    title: "Защита при проверках",
+    desc: "Защита при камеральных и выездных проверках.",
+    Icon: ProtectionGovernmentIcon,
+  },
+  {
+    title: "Сопровождение юр. отдела",
+    desc: "Аутсорсинг договорной работы и compliance.",
+    Icon: AssistanceLawIcon,
+  },
+  {
+    title: "Личная защита менеджмента",
+    desc: "Поддержка руководителей в уголовных и административных делах.",
+    Icon: ManagersAssistIcon,
+  },
+  {
+    title: "Корпоративные споры",
+    desc: "Разрешение конфликтов участников и защита прав миноритариев.",
+    Icon: CorporateDisputesIcon,
+  },
 ];
-const images = [
-  "/law_protect.jpg",
-  "/taxes_consult.jpg",
-  "/protection_government.jpg",
-  "/assistance_law.jpg",
-  "/managers_assist.jpg",
-  "/corporate_disputes.jpg",
-];
+
+const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref as React.RefObject<HTMLElement>);
+  return (
+    <CardBase ref={ref} inView={inView}>
+      <CardIconWrapper>
+        <service.Icon />
+      </CardIconWrapper>
+      <CardLabel>{service.title}</CardLabel>
+      <CardDesc>{service.desc}</CardDesc>
+      <MoreButton>Подробнее</MoreButton>
+    </CardBase>
+  );
+};
 
 export const AboutUsSection: React.FC = () => (
-  <SectionWrapper>
-    <TopSection>
-      <TextContainer>
-        <Title>
-          О партнерстве
-          <div className="icon">
-            <BrushIcon />
-          </div>
-        </Title>
-        <Desc>
-          Партнёрство «Бакаев и Партнеры» объединяет адвокатов-профессионалов
-          Москвы, Московской области и регионов России со стажем более 10 лет.
-        </Desc>
-        <ButtonAboutUs>Подробнее</ButtonAboutUs>
-      </TextContainer>
-      <RightImage src="/statue.jpeg" alt="О партнерстве" />
-    </TopSection>
-
-    <BottomSection>
-      <Subtitle>Наши специализации</Subtitle>
-      <Grid>
-        {specializations.map((label, idx) => (
-          <Card key={idx} delay={idx * 0.2}>
-            <CardImage src={images[idx]} alt={label} delay={idx * 0.2} />
-            <CardLabel delay={idx * 0.2}>{label}</CardLabel>
-          </Card>
-        ))}
-      </Grid>
-    </BottomSection>
-  </SectionWrapper>
+  <BackgroundSection>
+    <SectionWrapper>
+      <SmallTitle>Наши услуги</SmallTitle>
+      <BigTitle>Сферы практики</BigTitle>
+      <Divider />
+    </SectionWrapper>
+    <Grid>
+      {services.map((service, idx) => (
+        <ServiceCard key={idx} service={service} />
+      ))}
+    </Grid>
+  </BackgroundSection>
 );
+
+export default AboutUsSection;

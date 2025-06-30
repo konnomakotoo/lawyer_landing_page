@@ -1,7 +1,8 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
+import Footer from "./Footer"; // <-- подключаем твой компонент футера
 
-// Fade/slide animations
+// Анимации
 const slideInDown = keyframes`
   from { opacity: 0; transform: translateY(-20px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -11,140 +12,182 @@ const slideInUp = keyframes`
   to   { opacity: 1; transform: translateY(0); }
 `;
 
-// Wrapper: vertical split top parallax, bottom orange
-const SectionWrapper = styled.div`
-  position: relative;
+const PageWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   width: 100%;
 `;
 
-// Parallax background section
 const ParallaxSection = styled.section`
   position: relative;
   width: 100%;
-  height: 80vh;
-  background-image: url("/law.jpg");
-  background-attachment: fixed;
-  background-size: cover;
-  background-position: center;
-  overflow: hidden;
+  height: 70vh;
+  background: url("/contact_us.jpg") center/cover fixed;
 `;
 
-// Semi-transparent overlay on parallax only
 const ParallaxOverlay = styled.div`
   position: absolute;
   inset: 0;
-  background-color: ${({ theme }) => theme.colors.secondary};
-  opacity: 0.8;
+  background-color: rgba(24, 24, 31, 0.7);
 `;
 
-// Orange background bottom section
-const OrangeSection = styled.section`
-  width: 100%;
-  height: 20vh;
-  background-color: ${({ theme }) => theme.colors.buttons};
-`;
-
-// Content in parallax: heading and text
 const LeftContent = styled.div`
-  position: relative;
-  top: 20%;
-  left: 6%;
-  padding: 4rem 2rem;
-  z-index: 1;
-  max-width: 600px;
+  position: absolute;
+  top: 25%;
+  left: 5%;
+  max-width: 480px;
+  padding: 0 1rem;
   color: #fff;
   animation: ${slideInDown} 0.8s ease-out;
 
   h2 {
-    font-size: 2.5rem;
+    font-size: 2.25rem;
     margin-bottom: 1rem;
   }
   p {
-    font-size: 1.1rem;
+    font-size: 1rem;
     line-height: 1.4;
+  }
+
+  @media (max-width: 1080px) {
+    h2 {
+      font-size: 2rem;
+    }
+    p {
+      font-size: 0.95rem;
+    }
+  }
+  @media (max-width: 1050px) {
+    h2 {
+      font-size: 1.7rem;
+    }
+    p {
+      font-size: 0.8rem;
+    }
+  }
+  @media (max-width: 940px) {
+    display: none;
   }
 `;
 
-// Form floats overlapping both sections
 const FormContainer = styled.form`
   position: absolute;
-  top: 20%; /* overlaps bottom of parallax and top of orange */
-  right: -15%;
-  transform: translateX(-50%);
-  z-index: 2;
+  top: 18%;
+  right: 10%;
+  width: 40%;
   background: rgba(255, 255, 255, 0.95);
-  width: 100%;
-  height: 70%;
-  max-width: 600px;
-  padding: 2rem;
+  padding: 1rem;
   border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
   display: flex;
   flex-direction: column;
+  gap: 1rem;
   animation: ${slideInUp} 0.8s ease-out 0.2s;
+  z-index: 2;
 
   h3 {
     margin: 0 0 1rem;
-    color: ${({ theme }) => theme.colors.primary || "#0C253F"};
+    font-size: 1.6rem;
     text-align: center;
+    color: #0c253f;
   }
+
   input,
   textarea {
-    margin-bottom: 1rem;
+    width: 100%;
     padding: 0.75rem 1rem;
-    font-size: 1rem;
+    font-size: 0.9rem;
     border: 1px solid #ccc;
     border-radius: 6px;
+    transition: border-color 0.2s, box-shadow 0.2s;
     &:focus {
       outline: none;
-      border-color: ${({ theme }) => theme.colors.primary || "#75B1CE"};
+      border-color: #75b1ce;
+      box-shadow: 0 0 0 3px rgba(117, 177, 206, 0.3);
     }
   }
+
   textarea {
     resize: vertical;
-    min-height: 100px;
+    min-height: 120px;
   }
+
   button {
-    padding: 0.75rem 1rem;
-    font-size: 1.05rem;
-    background: ${({ theme }) => theme.colors.primary || "#0C253F"};
+    margin-top: 0.5rem;
+    padding: 0.75rem;
+    font-size: 1.1rem;
+    background: #e07a5f;
     color: #fff;
     border: none;
-    border-radius: 8px;
+    border-radius: 6px;
     cursor: pointer;
     transition: background 0.2s;
     &:hover {
-      background: ${({ theme }) => theme.colors.secondary || "#E07A5F"};
+      background: #e07a5f;
+    }
+  }
+
+  @media (max-width: 940px) {
+    top: auto;
+    bottom: 5%;
+    right: 50%;
+    transform: translateX(50%);
+    width: 80%;
+    padding: 1rem;
+
+    h3 {
+      margin: 0 0 0.5rem;
+      font-size: 1.5rem;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 0.5rem 0.9rem;
+      font-size: 0.8rem;
+    }
+
+    button {
+      margin-top: 0.2rem;
+      padding: 0.6rem;
+      font-size: 0.9rem;
     }
   }
 `;
 
 const ParallaxContactSection: React.FC = () => {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    alert("Заявка успешно отправлена!");
+    alert("Заявка отправлена!");
   };
 
   return (
-    <SectionWrapper>
+    <PageWrapper>
       <ParallaxSection>
         <ParallaxOverlay />
         <LeftContent>
           <h2>Хотите обсудить детали?</h2>
           <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae quia culpa necessitatibus repudiandae saepe harum voluptates quisquam esse velit earum iste asperiores unde, veniam quas? Dignissimos quod accusamus, accusantium inventore non autem est debitis eligendi, earum ullam, labore suscipit dolor similique excepturi. Dolor unde commodi architecto iste eaque harum optio.
+            Оставьте нам свои контакты и кратко опишите ситуацию — мы перезвоним
+            вам в течение часа с первичным предложением.
           </p>
         </LeftContent>
+        <FormContainer onSubmit={handleSubmit}>
+          <h3>Оставить заявку</h3>
+          <input type="text" name="name" placeholder="Ваше имя" required />
+          <input type="tel" name="phone" placeholder="Телефон" required />
+          <textarea
+            name="comment"
+            placeholder="Коротко о вопросе (не обязательно)"
+          />
+          <button type="submit">Отправить заявку</button>
+        </FormContainer>
       </ParallaxSection>
-      <OrangeSection />
-      <FormContainer onSubmit={handleSubmit}>
-        <h3>Оставьте заявку</h3>
-        <input type="text" name="name" placeholder="Ваше имя" required />
-        <input type="tel" name="phone" placeholder="Номер телефона" required />
-        <textarea name="comment" placeholder="Комментарий (необязательно)" />
-        <button type="submit">Отправить заявку</button>
-      </FormContainer>
-    </SectionWrapper>
+
+      {/* Футер */}
+      <Footer />
+    </PageWrapper>
   );
 };
 

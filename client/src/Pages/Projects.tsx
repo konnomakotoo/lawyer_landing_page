@@ -106,13 +106,12 @@ const List = styled.div`
 
 const Card = styled.article`
   display: flex;
+  cursor: pointer;
   align-items: center;
-  background: #fff;
+  background: ${({ theme }) => theme.colors.background};
   border-radius: 8px;
   overflow: hidden;
-  box-shadow:
-    0 2px 4px rgba(0,0,0,0.05),
-    0 4px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05), 0 4px 8px rgba(0, 0, 0, 0.05);
 
   @media (max-width: 600px) {
     flex-direction: column;
@@ -150,7 +149,7 @@ const Info = styled.div`
 const Title = styled.h3`
   margin: 0 0 ${({ theme }) => theme.space.sm} 0;
   font-size: 1.5rem;
-  color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.colors.buttons};
 `;
 
 const Desc = styled.p`
