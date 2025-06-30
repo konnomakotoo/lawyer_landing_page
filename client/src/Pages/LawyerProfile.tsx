@@ -5,10 +5,15 @@ import styled from 'styled-components';
 import $api from '../services/axios.instance';
 import type { Lawyer } from '../redux/slices/teamSlice';
 
+const API = import.meta.env.VITE_API_URL;
+
 const Container = styled.div`
   max-width: 800px;
   margin: 0 auto;
+  margin-top: 1rem;
   padding: ${({ theme }) => theme.space.lg};
+  background: ${({ theme }) => theme.colors.background};
+  border-radius: 40px;
 `;
 
 const BackButton = styled.button`
@@ -29,7 +34,6 @@ const Photo = styled.img`
 
 // новая секция с personal data
 const InfoCard = styled.div`
-  background: ${({ theme }) => theme.colors.backgroundAlt || '#f5f5f5'};
   padding: ${({ theme }) => theme.space.md};
   border-radius: 8px;
   display: flex;
@@ -95,16 +99,21 @@ export function LawyerProfile() {
 
   return (
     <Container>
-      <BackButton onClick={() => navigate('/team')}>
+      <BackButton onClick={() => navigate("/team")}>
         ← Назад к команде
       </BackButton>
 
-      <Photo src={lawyer?.image} alt={`${lawyer?.name} ${lawyer?.lastName}`} />
+      <Photo
+        src={`${API}/${lawyer?.image}`}
+        alt={`${lawyer?.name} ${lawyer?.lastName}`}
+      />
 
       <InfoCard>
         <InfoItem>
           <Label>Имя:</Label>
-          <Value>{lawyer?.name} {lawyer?.lastName}</Value>
+          <Value>
+            {lawyer?.name} {lawyer?.lastName}
+          </Value>
         </InfoItem>
         <InfoItem>
           <Label>Телефон:</Label>

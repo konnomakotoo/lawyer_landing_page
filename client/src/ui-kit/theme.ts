@@ -12,6 +12,7 @@ export const theme: DefaultTheme = {
     textOnBackground: "#0C253F",
     block: "#FBFBFB",
     blockDark: "#B0B0B0",
+    background: "#f5f5f5",
   },
   space: {
     sm: "0.5rem",

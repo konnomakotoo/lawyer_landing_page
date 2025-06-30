@@ -13,6 +13,7 @@ declare module 'styled-components' {
       textOnBackground: string;
       block: string;
       blockDark: string;
+      background: string;
     };
     space: {
       sm: string;
